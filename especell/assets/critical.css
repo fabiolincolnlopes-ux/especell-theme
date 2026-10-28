@@ -1,0 +1,1031 @@
+/** Critical CSS for the theme. This file is included on every page. */
+
+/* ==========================================================================
+   Reset (inspired by https://www.joshwcomeau.com/css/custom-css-reset/)
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100svh;
+}
+
+html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  border-radius: var(--style-border-radius-inputs);
+}
+
+select {
+  background-color: var(--color-background);
+  color: currentcolor;
+}
+
+dialog {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+p {
+  text-wrap: pretty;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p:empty {
+  display: none;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):first-child,
+:empty:first-child + :where(p, h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):last-child,
+:where(p, h1, h2, h3, h4, h5, h6) + :has(+ :empty:last-child) {
+  margin-block-end: 0;
+}
+
+/* ==========================================================================
+   Base typography
+   ========================================================================== */
+body {
+  font-family: var(--font-primary--family);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  line-height: 1.03;
+}
+
+a {
+  color: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ==========================================================================
+   Shared building blocks
+   ========================================================================== */
+
+/** Eyebrow: small solid accent label above headings */
+.eyebrow {
+  display: inline-block;
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+  padding: 0.4rem 0.8rem;
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.eyebrow--outline {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+/** Buttons: sharp corners, solid fills, no soft gradients */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1rem 1.85rem;
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease,
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+}
+
+/** Wipe fill that sweeps in on hover */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translateY(101%);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: translateY(0);
+}
+
+.btn--accent {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+.btn--accent::before {
+  background-color: var(--color-ink);
+}
+.btn--accent:hover,
+.btn--accent:focus-visible {
+  color: var(--color-accent);
+}
+
+.btn--dark {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+.btn--dark::before {
+  background-color: var(--color-accent);
+}
+.btn--dark:hover,
+.btn--dark:focus-visible {
+  color: var(--color-ink);
+}
+
+.btn--outline {
+  background-color: transparent;
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+  color: inherit;
+}
+.btn--outline::before {
+  background-color: var(--color-accent);
+}
+.btn--outline:hover,
+.btn--outline:focus-visible {
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+
+.btn--sm {
+  padding: 0.7rem 1.2rem;
+  font-size: 0.78rem;
+}
+
+/** Cards */
+.card {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 9%, transparent);
+  border-radius: 0;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease,
+    box-shadow 0.4s ease;
+}
+
+/** Accent rule that grows across the top edge on hover */
+.card--interactive::after {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card--interactive:hover,
+.card--interactive:focus-within {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  box-shadow: 0 18px 40px -24px rgb(0 0 0 / 45%);
+}
+
+.card--interactive:hover::after,
+.card--interactive:focus-within::after {
+  transform: scaleX(1);
+}
+
+/** Card sitting on a dark section: inverted, so photos read like a gallery */
+.card--dark {
+  background-color: color-mix(in srgb, #fff 5%, var(--color-ink));
+  border-color: color-mix(in srgb, #fff 12%, transparent);
+  color: #fff;
+}
+
+.card--dark.card--interactive:hover,
+.card--dark.card--interactive:focus-within {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  box-shadow: 0 22px 48px -26px rgb(0 0 0 / 85%);
+}
+
+/** Surfaces */
+.bg-ink {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+/* Stepped down enough to read as a distinct band next to a plain-background
+   section, not as an accidental shade of the same thing. */
+.bg-muted {
+  background-color: color-mix(in srgb, var(--color-ink) 9%, var(--color-background));
+}
+
+/** Section shell shared by every custom section */
+.section {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.section__inner {
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+.section__intro {
+  max-width: 40rem;
+}
+
+.section__intro--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section__title {
+  margin-top: 1.1rem;
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+}
+
+.section__description {
+  margin-top: 1.1rem;
+  color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  font-size: 1.02rem;
+}
+
+.bg-ink .section__description {
+  color: color-mix(in srgb, #fff 68%, transparent);
+}
+
+/** Icon tile used across sections */
+.icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  background-color: var(--color-ink);
+  color: var(--color-accent);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.icon-tile svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card--interactive:hover .icon-tile {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.card--interactive:hover .icon-tile svg {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+/** Media frame with zoom-on-hover */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card--interactive:hover .media-frame img,
+.media-frame:hover img {
+  transform: scale(1.06);
+}
+
+/** Placeholder shown where a merchant image has not been uploaded yet */
+/** Inside a framed slot the placeholder should fill it, not set its own ratio */
+.media-frame > .media-placeholder {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+.media-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--color-ink) 6%, transparent) 0 12px,
+    transparent 12px 24px
+  );
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  font-family: var(--font-heading--family);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 1rem;
+}
+
+/** Inline text link with sliding underline */
+.link-underline {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.87rem;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ==========================================================================
+   Reading progress bar
+   Sits above every other fixed layer. Animated with scaleX rather than width
+   so it stays on the compositor and never triggers layout.
+   ========================================================================== */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 70;
+  pointer-events: none;
+}
+
+.reading-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 70%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   Section dots — where am I on the page
+   Vertically centred on the right so it never collides with the floating
+   actions sitting in the bottom-right corner.
+   ========================================================================== */
+.section-dots {
+  position: fixed;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.85rem;
+}
+
+.section-dots__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.section-dots__label {
+  font-family: var(--font-heading--family);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-ink);
+  color: #fff;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.section-dots__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--color-ink) 45%, transparent);
+  background-color: transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Over a dark section the outline has to flip or it disappears */
+.section-dots[data-on-dark] .section-dots__dot {
+  border-color: color-mix(in srgb, #fff 55%, transparent);
+}
+
+.section-dots__item:hover .section-dots__label,
+.section-dots__item:focus-visible .section-dots__label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.section-dots__item:hover .section-dots__dot {
+  transform: scale(1.3);
+  border-color: var(--color-accent);
+}
+
+.section-dots__item[aria-current="true"] .section-dots__dot {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: scale(1.35);
+}
+
+@media (max-width: 47.99rem) {
+  /* Labels would cover the content on a phone; dots alone still orient */
+  .section-dots {
+    right: 0.5rem;
+    gap: 0.7rem;
+  }
+  .section-dots__label {
+    display: none;
+  }
+  .section-dots__dot {
+    width: 7px;
+    height: 7px;
+  }
+}
+
+/* ==========================================================================
+   Floating action stack (bottom-right)
+   ========================================================================== */
+.floating-actions {
+  position: fixed;
+  right: 1.15rem;
+  bottom: 1.15rem;
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.floating-actions__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+}
+
+.floating-actions__btn svg {
+  position: relative;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.floating-actions__btn:hover {
+  transform: translateY(-3px) scale(1.06);
+}
+
+.floating-actions__btn--wa {
+  background-color: #25d366;
+  color: #fff;
+  box-shadow: 0 10px 26px -10px rgb(37 211 102 / 65%);
+}
+.floating-actions__btn--wa:hover {
+  background-color: #1fb457;
+}
+
+/** Halo that keeps pulsing so the bubble stays noticeable without blinking */
+.floating-actions__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: #25d366;
+  opacity: 0.55;
+  animation: fa-pulse 2.6s ease-out infinite;
+}
+
+@keyframes fa-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.floating-actions__btn--top {
+  background-color: var(--color-ink);
+  color: #fff;
+  box-shadow: 0 10px 26px -12px rgb(0 0 0 / 70%);
+  width: 2.9rem;
+  height: 2.9rem;
+}
+.floating-actions__btn--top svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.floating-actions__btn--top:hover {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+.floating-actions__btn--top[hidden] {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  /* The fixed bottom bar owns the WhatsApp action on phones */
+  .floating-actions__btn--wa {
+    display: none;
+  }
+  .floating-actions {
+    bottom: 4.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-actions__pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Animated backdrop for dark sections
+
+   Keeps flat black from looking dead. Everything animates on transform or
+   opacity only, so it stays on the compositor and costs almost nothing.
+   ========================================================================== */
+.fx-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/** Technical grid that drifts diagonally, forever */
+.fx-grid {
+  position: absolute;
+  /* Oversized so the drift never exposes an edge */
+  inset: -10%;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, #fff 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, #fff 5%, transparent) 1px, transparent 1px);
+  background-size: 68px 68px;
+  animation: fx-grid-drift 26s linear infinite;
+}
+
+/** Light-section variant: same drifting grid, drawn in ink instead of white */
+.fx-grid--light {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-ink) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 6%, transparent) 1px, transparent 1px);
+}
+
+.fx-glow--accent-soft {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-accent) 30%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+/** Accent glow that slowly breathes and wanders */
+.fx-glow {
+  position: absolute;
+  top: -35%;
+  right: -10%;
+  width: min(46rem, 90%);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-accent) 15%, transparent) 0%,
+    transparent 62%
+  );
+  animation: fx-glow-breathe 14s ease-in-out infinite alternate;
+}
+
+.fx-glow--left {
+  top: auto;
+  bottom: -40%;
+  right: auto;
+  left: -12%;
+  width: min(34rem, 80%);
+  animation-duration: 19s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes fx-grid-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Exactly one grid cell, so the loop is invisible */
+    transform: translate3d(68px, 68px, 0);
+  }
+}
+
+@keyframes fx-glow-breathe {
+  from {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: translate3d(6%, 4%, 0) scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Motion primitives (driven by assets/theme.js)
+   ========================================================================== */
+
+/** Reveal on scroll.
+    Scoped to `.js` so that if the script never runs — disabled JS, a script
+    error, a crawler that does not execute JS — the content simply shows
+    instead of staying invisible. Never hide content behind JS alone. */
+.js [data-animate] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-animate].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/** Parallax layer */
+[data-parallax] {
+  will-change: transform;
+}
+
+/** Card tilt: JS writes an inline transform on every pointer move, so the
+    transition has to stay short or the card lags behind the cursor. */
+[data-tilt] {
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out, border-color 0.3s ease, box-shadow 0.4s ease;
+}
+
+/** Magnetic button: JS sets --magnet-x / --magnet-y */
+[data-magnetic] {
+  transform: translate3d(var(--magnet-x, 0), var(--magnet-y, 0), 0);
+}
+
+/** Honour users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-animate] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Section layout utilities (from the Skeleton base)
+   ========================================================================== */
+
+/**
+ * Grid that enables both full-width and constrained layouts depending on the
+ * class of the child elements.
+ */
+.shopify-section {
+  --content-width: min(
+    calc(var(--page-width) - var(--page-margin) * 2),
+    calc(100% - var(--page-margin) * 2)
+  );
+  --content-margin: minmax(var(--page-margin), 1fr);
+  --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
+
+  position: relative;
+  grid-template-columns: var(--content-grid);
+  display: grid;
+  width: 100%;
+}
+
+.shopify-section > * {
+  grid-column: 2;
+}
+
+.shopify-section > .full-width {
+  grid-column: 1 / -1;
+}
+
+/* ==================================================================
+ * Technician's reticle — the pointer companion, mouse only.
+ * Sits above everything and never intercepts a click.
+ * ================================================================== */
+.reticle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform, width, height;
+}
+.reticle.is-on {
+  opacity: 1;
+}
+.reticle i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--color-accent);
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+}
+.reticle i:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.reticle i:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+.reticle i:nth-child(3) { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+.reticle i:nth-child(4) { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+
+/* Locked onto a target: corners lengthen into a frame */
+.reticle.is-locked i {
+  width: 16px;
+  height: 16px;
+}
+
+/* No cursor to decorate, and reduced motion means no chase animation */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .reticle { display: none; }
+}
+
+/* ==================================================================
+ * Cards light up under the pointer. --mx/--my are written by the same
+ * pointermove handler that drives the tilt, so this costs no extra
+ * listener. Falls back to a centred glow before the first move.
+ * ================================================================== */
+.card--interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    18rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--color-accent) 16%, transparent) 0%,
+    transparent 62%
+  );
+}
+.card--interactive:hover::before {
+  opacity: 1;
+}
+/* On the dark cards the same glow needs more presence to read at all */
+.card--dark.card--interactive::before {
+  background: radial-gradient(
+    18rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--color-accent) 24%, transparent) 0%,
+    transparent 62%
+  );
+}
+
+/* ==================================================================
+ * Touch feedback. A phone has no hover, so the press itself has to
+ * answer — otherwise a tap feels like nothing happened.
+ * ================================================================== */
+@media (hover: none) {
+  .btn:active,
+  .card--interactive:active,
+  .services__card--link:active {
+    transform: scale(0.975);
+  }
+  .btn,
+  .card--interactive,
+  .services__card--link {
+    transition: transform 0.12s ease;
+  }
+}
+
+/* ==================================================================
+ * Phones have no hover, so the scroll itself drives the card motion.
+ * Native scroll-driven animation: runs on the compositor, costs no JS,
+ * and simply does not apply where the browser lacks support.
+ *
+ * Transform only — never opacity. The reveal system already owns
+ * opacity, and layering a second animation on it risks leaving copy
+ * invisible if anything misfires.
+ * ================================================================== */
+@keyframes card-rise {
+  from {
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .card--interactive {
+      animation: card-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 30%;
+    }
+  }
+}
+
+/* ==================================================================
+ * Second layer of motion: the small responses that make a page feel
+ * answered rather than static. All transform/opacity, so none of it
+ * costs a layout pass.
+ * ================================================================== */
+
+/* Icons inside buttons react to the hover.
+   A leading icon (WhatsApp) swells; a trailing icon (arrow) advances. */
+.btn > svg {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn:hover > svg:first-child {
+  transform: scale(1.15) rotate(-6deg);
+}
+.btn:hover > svg:last-child:not(:first-child) {
+  transform: translateX(5px);
+}
+
+/* Section headings get an accent rule that draws itself as the block
+   arrives. Keyed off the reveal class already on the intro wrapper, so
+   it stays in step with the copy instead of running on its own clock. */
+.section__title {
+  position: relative;
+}
+.section__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.55rem;
+  width: 3.5rem;
+  height: 3px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
+}
+.section__intro--center .section__title::after {
+  left: 50%;
+  margin-left: -1.75rem;
+  transform-origin: center;
+}
+[data-animate].is-visible .section__title::after {
+  transform: scaleX(1);
+}
+
+/* FAQ rows nudge inward on hover, so the whole row reads as the target
+   rather than just the words. */
+/* Scoped through .faq__item so it outranks the section stylesheet, which
+   declares its own `transition: color` on .faq__question and loads later. */
+.faq__item .faq__question {
+  padding-inline: 0;
+  transition: padding-inline 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.25s ease;
+}
+.faq__item .faq__question:hover {
+  padding-inline: 0.6rem 0;
+}
+.faq__question .faq__icon {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.faq__question:hover .faq__icon {
+  transform: scale(1.12) rotate(45deg);
+}
+
+/* Store tags drift down into place when the card is hovered */
+.stores__tag {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+}
+.stores__card:hover .stores__tag {
+  transform: translateY(-2px);
+}
+.stores__card:hover .stores__tag--city {
+  transition-delay: 0.04s;
+}
+
+/* The map button grows a small arrow that was not taking space before */
+.stores__map-btn::after {
+  content: "\2192";
+  display: inline-block;
+  width: 0;
+  margin-left: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: width 0.3s ease, margin-left 0.3s ease, opacity 0.3s ease;
+}
+.stores__map-btn:hover::after {
+  width: 1em;
+  margin-left: 0.4rem;
+  opacity: 1;
+}
+
+/* Everything above is decoration. Anyone who asked for less motion
+   gets the layout without any of it. */
+@media (prefers-reduced-motion: reduce) {
+  .btn > svg,
+  .section__title::after,
+  .faq__question,
+  .faq__question .faq__icon,
+  .stores__tag,
+  .stores__map-btn::after {
+    transition: none;
+  }
+  .section__title::after {
+    transform: scaleX(1);
+  }
+}

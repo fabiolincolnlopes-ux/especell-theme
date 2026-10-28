@@ -1,0 +1,86 @@
+{
+  "general": {
+    "404": "Não encontrado",
+    "article": "Artigo",
+    "block": "Bloco",
+    "blog": "Blog",
+    "cart": "Carrinho",
+    "collection": "Coleção",
+    "collections": "Coleções",
+    "collection_card": "Cartão de coleção",
+    "collections_grid": "Grade de coleções",
+    "colors": "Cores",
+    "column": "Coluna",
+    "content": "Conteúdo",
+    "custom_section": "Seção personalizada",
+    "fonts": "Fontes",
+    "footer": "Rodapé",
+    "group": "Grupo",
+    "header": "Cabeçalho",
+    "hero": "Topo (Hero)",
+    "services": "Serviços",
+    "stores": "Lojas",
+    "cta": "Chamada para ação",
+    "layout": "Layout",
+    "main": "Principal",
+    "page": "Página",
+    "password": "Senha",
+    "primary": "Primária",
+    "product": "Produto",
+    "row": "Linha",
+    "search": "Buscar",
+    "secondary": "Secundária",
+    "section": "Seção",
+    "settings": "Configurações",
+    "sidebar": "Barra lateral",
+    "text": "Texto",
+    "theme": "Tema",
+    "typography": "Tipografia"
+  },
+  "labels": {
+    "alignment": "Alinhamento",
+    "background": "Fundo",
+    "foreground": "Primeiro plano",
+    "grid_gap": "Espaçamento da grade",
+    "grid_item_width": "Largura do item",
+    "input_corner_radius": "Raio das bordas dos campos",
+    "layout_direction": "Direção do layout",
+    "menu": "Menu",
+    "customer_account_menu": "Menu da conta do cliente",
+    "padding": "Espaçamento interno",
+    "page_margin": "Margem da página",
+    "page_width": "Largura da página",
+    "show_payment_icons": "Mostrar ícones de pagamento",
+    "text_style": "Estilo do texto",
+    "text": "Texto",
+    "logo": "Logo",
+    "accent_color": "Cor de destaque",
+    "ink_color": "Cor escura (preto)",
+    "cta_label": "Texto do botão",
+    "cta_url": "Link do botão"
+  },
+  "options": {
+    "alignment": {
+      "left": "Esquerda",
+      "center": "Centro",
+      "right": "Direita"
+    },
+    "direction": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "page_width": {
+      "narrow": "Estreita",
+      "wide": "Larga"
+    },
+    "size": {
+      "large": "Grande",
+      "small": "Pequeno"
+    },
+    "text_style": {
+      "title": "Título",
+      "subtitle": "Subtítulo",
+      "normal": "Texto normal"
+    }
+  }
+}

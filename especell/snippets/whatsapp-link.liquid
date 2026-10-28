@@ -1,0 +1,51 @@
+{%- comment -%}
+  Builds a WhatsApp link carrying a prefilled message, so the shop can tell a
+  site visitor apart from any other contact — and, on store buttons, know which
+  unit the person wants before answering.
+
+  Parameters
+    url   - the wa.me link. Falls back to the global one when empty.
+    store - optional store name; switches to the per-store message.
+    topic - optional service name; switches to the per-service message. On a
+            service landing page this makes the lead arrive already saying what
+            they searched for, which is the whole point of splitting the pages.
+
+  `store` wins over `topic` — a store button is always about that unit.
+
+  Usage
+    href="{% render 'whatsapp-link', url: block.settings.whatsapp_url, store: block.settings.name %}"
+    href="{% render 'whatsapp-link', topic: page.title %}"
+{%- endcomment -%}
+
+{%- liquid
+  assign wa_url = url | default: settings.whatsapp_url
+
+  if wa_url == blank
+    assign wa_final = '#'
+  else
+    if store != blank
+      assign template = settings.whatsapp_message_store | default: 'Olá! Vim pelo site e gostaria de falar com a loja {loja}.'
+      assign message = template | replace: '{loja}', store
+    elsif topic != blank
+      assign template = settings.whatsapp_message_service | default: 'Olá! Vim pelo site e gostaria de saber sobre {servico}.'
+      assign message = template | replace: '{servico}', topic
+    else
+      assign message = settings.whatsapp_message | default: 'Olá! Vim pelo site.'
+    endif
+
+    if message == blank or wa_url contains 'text='
+      # Merchant either cleared the message or wrote their own into the link
+      assign wa_final = wa_url
+    else
+      if wa_url contains '?'
+        assign separator = '&'
+      else
+        assign separator = '?'
+      endif
+      assign encoded = message | url_encode
+      assign wa_final = wa_url | append: separator | append: 'text=' | append: encoded
+    endif
+  endif
+-%}
+
+{{- wa_final -}}

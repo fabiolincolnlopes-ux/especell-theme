@@ -1,0 +1,42 @@
+{% comment %}
+  Floating action stack pinned to the bottom-right corner.
+
+  On phones the WhatsApp bubble is hidden: the fixed bottom bar already
+  carries that call to action, and two of them would fight for the same
+  thumb. Back-to-top stays, lifted above the bar.
+{% endcomment %}
+{%- liquid
+  assign show_wa = false
+  if settings.show_floating_whatsapp and settings.whatsapp_url != blank
+    assign show_wa = true
+  endif
+-%}
+
+{% if show_wa or settings.show_back_to_top %}
+  <div class="floating-actions">
+    {% if settings.show_back_to_top %}
+      <button
+        type="button"
+        class="floating-actions__btn floating-actions__btn--top"
+        data-back-to-top
+        aria-label="Voltar ao topo"
+        hidden
+      >
+        {{ 'icon-arrow-up.svg' | inline_asset_content }}
+      </button>
+    {% endif %}
+
+    {% if show_wa %}
+      <a
+        href="{% render 'whatsapp-link' %}"
+        class="floating-actions__btn floating-actions__btn--wa"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Falar no WhatsApp"
+      >
+        <span class="floating-actions__pulse" aria-hidden="true"></span>
+        {{ 'icon-whatsapp.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+  </div>
+{% endif %}

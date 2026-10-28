@@ -1,0 +1,77 @@
+{% comment %}
+  Google Ads / GA4 tracking.
+
+  Nothing renders until the merchant fills the IDs in theme settings, so the
+  live site stays clean while the account is being set up.
+
+  Two independent halves:
+
+  1. The Google tag itself, loaded only if `google_tag_id` is set. Leave that
+     field EMPTY when the Google & YouTube app is installed — the app already
+     injects a tag, and a second one double-counts every conversion.
+
+  2. The click listener, which runs whenever `google_ads_conversion_label` is
+     set, regardless of who loaded gtag. This site has no checkout: the
+     conversion IS the WhatsApp or phone tap, so it has to be measured here.
+     The listener degrades silently if gtag never arrives.
+{% endcomment %}
+
+{%- liquid
+  assign tag_id = settings.google_tag_id | strip
+  assign conv_label = settings.google_ads_conversion_label | strip
+-%}
+
+{%- if tag_id != blank -%}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ tag_id }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', {{ tag_id | json }});
+  </script>
+{%- endif -%}
+
+{%- if conv_label != blank -%}
+  <script>
+    (function () {
+      var LABEL = {{ conv_label | json }};
+
+      // Each store has its own WhatsApp number, so the digits alone tell us
+      // which unit the lead went to — no extra markup needed on the links.
+      function digits(href) {
+        var m = href.match(/(?:wa\.me\/|phone=|tel:)\+?([0-9]+)/);
+        return m ? m[1] : '';
+      }
+
+      function section(el) {
+        var s = el.closest('section[id], footer, header');
+        return s ? (s.id || s.tagName.toLowerCase()) : 'desconhecida';
+      }
+
+      document.addEventListener('click', function (event) {
+        var link = event.target.closest('a[href]');
+        if (!link) return;
+
+        var href = link.getAttribute('href') || '';
+        var method;
+        if (href.indexOf('wa.me') > -1 || href.indexOf('api.whatsapp.com') > -1) {
+          method = 'whatsapp';
+        } else if (href.indexOf('tel:') === 0) {
+          method = 'telefone';
+        } else {
+          return;
+        }
+
+        if (typeof window.gtag !== 'function') return;
+
+        window.gtag('event', 'conversion', {
+          send_to: LABEL,
+          // Reported as parameters so Google Ads can segment by store/section.
+          metodo: method,
+          numero: digits(href),
+          secao: section(link)
+        });
+      }, { passive: true });
+    })();
+  </script>
+{%- endif -%}

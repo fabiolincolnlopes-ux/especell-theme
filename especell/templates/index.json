@@ -1,0 +1,546 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": {
+            "kicker": "Mais de",
+            "value": "15",
+            "suffix": "",
+            "label": "Anos no mercado"
+          }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": {
+            "kicker": "São",
+            "value": "5",
+            "suffix": "",
+            "label": "Lojas físicas"
+          }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": {
+            "kicker": "Em menos de",
+            "value": "8",
+            "suffix": "h",
+            "label": "A maioria dos consertos"
+          }
+        },
+        "stat-4": {
+          "type": "stat",
+          "settings": {
+            "kicker": "São",
+            "value": "90",
+            "suffix": "",
+            "label": "Dias de garantia no reparo"
+          }
+        }
+      },
+      "block_order": [
+        "stat-1",
+        "stat-2",
+        "stat-3",
+        "stat-4"
+      ],
+      "settings": {
+        "eyebrow": "Conserto e assistência técnica em Curitiba e região",
+        "heading": "Seu aparelho nas mãos de quem entende",
+        "description": "Referência em conserto de celular, notebook, PC e console em Curitiba e região metropolitana. São 15 anos de mercado, cinco lojas próprias, garantia feita na própria loja e nota fiscal em todos os serviços.",
+        "image": "shopify://shop_images/exec-4b91ee1e-82d9-42bc-9ead-873df5dcaa4d.png",
+        "trust_1": "Avaliação gratuita",
+        "trust_2": "Nota fiscal em todo serviço",
+        "trust_3": "Garantia feita na própria loja",
+        "trust_4": "5 lojas anexas ao Jacomar",
+        "primary_label": "Fazer orçamento",
+        "primary_url": "",
+        "secondary_label": "Ver serviços",
+        "secondary_url": "#servicos"
+      }
+    },
+    "brands": {
+      "type": "brands",
+      "blocks": {
+        "b-1": {
+          "type": "brand",
+          "settings": {
+            "name": "Apple"
+          }
+        },
+        "b-2": {
+          "type": "brand",
+          "settings": {
+            "name": "Samsung"
+          }
+        },
+        "b-3": {
+          "type": "brand",
+          "settings": {
+            "name": "Motorola"
+          }
+        },
+        "b-4": {
+          "type": "brand",
+          "settings": {
+            "name": "Xiaomi"
+          }
+        },
+        "b-5": {
+          "type": "brand",
+          "settings": {
+            "name": "LG"
+          }
+        },
+        "b-6": {
+          "type": "brand",
+          "settings": {
+            "name": "Sony"
+          }
+        },
+        "b-7": {
+          "type": "brand",
+          "settings": {
+            "name": "Asus"
+          }
+        },
+        "b-8": {
+          "type": "brand",
+          "settings": {
+            "name": "Microsoft"
+          }
+        }
+      },
+      "block_order": [
+        "b-1",
+        "b-2",
+        "b-3",
+        "b-4",
+        "b-5",
+        "b-6",
+        "b-7",
+        "b-8"
+      ],
+      "settings": {
+        "heading": "Consertamos todas as marcas",
+        "speed": 35
+      }
+    },
+    "services": {
+      "type": "services",
+      "blocks": {
+        "s-1": {
+          "type": "service",
+          "settings": {
+            "icon": "wrench",
+            "title": "Conserto de celular",
+            "description": "Troca de tela, bateria, conectores e reparo de placa — em aparelhos de todas as marcas.",
+            "note": ""
+          }
+        },
+        "s-2": {
+          "type": "service",
+          "settings": {
+            "icon": "laptop",
+            "title": "Notebook e PC",
+            "description": "Manutenção, limpeza, upgrade e reparo de notebooks e computadores.",
+            "note": ""
+          }
+        },
+        "s-3": {
+          "type": "service",
+          "settings": {
+            "icon": "gamepad",
+            "title": "Consoles",
+            "description": "Manutenção e reparo de videogames e controles.",
+            "note": ""
+          }
+        },
+        "s-4": {
+          "type": "service",
+          "settings": {
+            "icon": "shield",
+            "title": "Película e capinha",
+            "description": "Instalação de película na hora e capinhas para os principais modelos.",
+            "note": ""
+          }
+        },
+        "s-5": {
+          "type": "service",
+          "settings": {
+            "icon": "wrench",
+            "title": "Informática em geral",
+            "description": "Acessórios, periféricos e serviços de informática no balcão.",
+            "note": ""
+          }
+        },
+        "s-6": {
+          "type": "service",
+          "settings": {
+            "icon": "clock",
+            "title": "Avaliação antes do orçamento",
+            "description": "O aparelho é avaliado primeiro, e só depois passamos o orçamento para você decidir.",
+            "note": ""
+          }
+        }
+      },
+      "block_order": [
+        "s-1",
+        "s-2",
+        "s-3",
+        "s-4",
+        "s-5",
+        "s-6"
+      ],
+      "settings": {
+        "anchor_id": "servicos",
+        "eyebrow": "O que fazemos",
+        "heading": "Nossos serviços",
+        "description": "Consertos e acessórios para celular, notebook, PC e console — com avaliação feita antes de qualquer orçamento.",
+        "footnote": "Os valores dependem do aparelho e do tipo de reparo. A avaliação é gratuita e você recebe o orçamento antes de qualquer serviço."
+      }
+    },
+    "how": {
+      "type": "how-it-works",
+      "blocks": {
+        "h-1": {
+          "type": "step",
+          "settings": {
+            "icon": "search",
+            "title": "Avaliação",
+            "description": "Você leva o aparelho em uma das nossas lojas e nossa equipe identifica o problema."
+          }
+        },
+        "h-2": {
+          "type": "step",
+          "settings": {
+            "icon": "document",
+            "title": "Orçamento",
+            "description": "Passamos o orçamento do serviço. Você decide se quer seguir, sem compromisso."
+          }
+        },
+        "h-3": {
+          "type": "step",
+          "settings": {
+            "icon": "wrench",
+            "title": "Conserto",
+            "description": "Aprovado o orçamento, o reparo é executado pela nossa equipe técnica."
+          }
+        }
+      },
+      "block_order": [
+        "h-1",
+        "h-2",
+        "h-3"
+      ],
+      "settings": {
+        "anchor_id": "como-funciona",
+        "eyebrow": "Passo a passo",
+        "heading": "Como funciona",
+        "description": "Um processo simples e sem surpresa: você só aprova o serviço depois de saber exatamente o que será feito."
+      }
+    },
+    "about": {
+      "type": "about",
+      "blocks": {
+        "p-1": {
+          "type": "point",
+          "settings": {
+            "title": "Todas as marcas",
+            "description": "Atendemos aparelhos de todos os fabricantes."
+          }
+        },
+        "p-2": {
+          "type": "point",
+          "settings": {
+            "title": "5 lojas físicas",
+            "description": "Curitiba e região metropolitana."
+          }
+        },
+        "p-3": {
+          "type": "point",
+          "settings": {
+            "title": "Atendimento presencial",
+            "description": "Você fala com a equipe cara a cara, na loja."
+          }
+        }
+      },
+      "block_order": [
+        "p-1",
+        "p-2",
+        "p-3"
+      ],
+      "settings": {
+        "anchor_id": "sobre",
+        "eyebrow": "Quem somos",
+        "heading": "Especialistas em consertos desde 2010",
+        "body": "<p>A Especell é uma assistência técnica especializada em celular, notebook, PC e console, no mercado desde 2010.</p><p>Hoje somos cinco lojas físicas em Curitiba e região metropolitana, com atendimento presencial e equipe técnica própria.</p>",
+        "image": "shopify://shop_images/exec-26835a75-119c-4ed4-9e11-1d00e987f0c5.png",
+        "badge_value": "2010",
+        "badge_label": "Desde",
+        "cta_label": "Ver nossas lojas",
+        "cta_url": "#lojas"
+      }
+    },
+    "stores": {
+      "type": "stores",
+      "blocks": {
+        "loja-maestro": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-08_at_13.30.55.jpg",
+            "name": "Especell Maestro",
+            "city": "Curitiba",
+            "venue": "Anexo ao Jacomar",
+            "address": "R. Maestro Carlos Frank, 2812 — Boqueirão, Curitiba/PR, 81750-400 (anexo ao Jacomar, loja 4)",
+            "hours": "Seg a Sáb · 10h às 14h e 15h às 20h",
+            "phone": "(41) 99903-1636",
+            "street": "R. Maestro Carlos Frank, 2812 - Boqueirão (anexo ao Jacomar, loja 4)",
+            "locality": "Curitiba",
+            "region": "PR",
+            "postal_code": "81750-400",
+            "whatsapp_url": "https://wa.me/554198055863",
+            "map_url": "https://www.google.com/maps/search/?api=1&query=R.+Maestro+Carlos+Frank+2812+Boqueirao+Curitiba+PR",
+            "hours_schema": "Mo-Sa 10:00-14:00, Mo-Sa 15:00-20:00"
+          }
+        },
+        "loja-novo-mundo": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-08_at_13.35.53.jpg",
+            "name": "Especell Novo Mundo",
+            "city": "Curitiba",
+            "venue": "Anexo ao Jacomar",
+            "address": "R. Pedro Gusso, 1089 — Novo Mundo, Curitiba/PR, 81050-200 (anexo ao Jacomar, loja 3)",
+            "hours": "Seg a Sáb · 10h às 14h e 15h às 20h",
+            "phone": "(41) 99895-0941",
+            "street": "R. Pedro Gusso, 1089 - Novo Mundo (anexo ao Jacomar, loja 3)",
+            "locality": "Curitiba",
+            "region": "PR",
+            "postal_code": "81050-200",
+            "whatsapp_url": "https://wa.me/5541998950941",
+            "map_url": "https://www.google.com/maps/search/?api=1&query=R.+Pedro+Gusso+1089+Novo+Mundo+Curitiba+PR",
+            "hours_schema": "Mo-Sa 10:00-14:00, Mo-Sa 15:00-20:00"
+          }
+        },
+        "loja-br277": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-08_at_13.25.53.jpg",
+            "name": "Especell BR277",
+            "city": "Curitiba",
+            "venue": "Anexo ao Jacomar",
+            "address": "R. Eunice Bettini Bartoszeck, 1990 — Uberaba, Curitiba/PR (anexo ao Jacomar, loja 3)",
+            "hours": "Seg a Sáb · 10h às 14h e 15h às 20h",
+            "phone": "(41) 99941-6986",
+            "street": "R. Eunice Bettini Bartoszeck, 1990 - Uberaba (anexo ao Jacomar, loja 3)",
+            "locality": "Curitiba",
+            "region": "PR",
+            "postal_code": "",
+            "whatsapp_url": "https://wa.me/5541999416986",
+            "map_url": "https://www.google.com/maps/search/?api=1&query=R.+Eunice+Bettini+Bartoszeck+1990+Uberaba+Curitiba+PR",
+            "hours_schema": "Mo-Sa 10:00-14:00, Mo-Sa 15:00-20:00"
+          }
+        },
+        "loja-guatupe": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-08_at_13.33.57.jpg",
+            "name": "Especell Guatupê",
+            "city": "São José dos Pinhais",
+            "venue": "Anexo ao Jacomar",
+            "address": "Av. Tomás Carmeliano de Miranda, 345 — Guatupê, São José dos Pinhais/PR, 83060-196 (anexo ao Jacomar, loja 3)",
+            "hours": "Seg a Sáb · 10h às 14h e 15h às 20h",
+            "phone": "(41) 3385-1617",
+            "street": "Av. Tomás Carmeliano de Miranda, 345 - Guatupê (anexo ao Jacomar, loja 3)",
+            "locality": "São José dos Pinhais",
+            "region": "PR",
+            "postal_code": "83060-196",
+            "whatsapp_url": "https://wa.me/554133851617",
+            "map_url": "https://www.google.com/maps/search/?api=1&query=Av.+Tomas+Carmeliano+de+Miranda+345+Guatupe+Sao+Jose+dos+Pinhais+PR",
+            "hours_schema": "Mo-Sa 10:00-14:00, Mo-Sa 15:00-20:00"
+          }
+        },
+        "loja-costeira": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-08_at_13.50.27.jpg",
+            "name": "Especell Costeira",
+            "city": "São José dos Pinhais",
+            "venue": "Anexo ao Jacomar",
+            "address": "Alameda Arpo, 1929 — Costeira, São José dos Pinhais/PR, 83010-290 (anexo ao Jacomar, loja 3)",
+            "hours": "Seg a Sáb · 10h às 14h e 15h às 20h",
+            "phone": "(41) 8432-9935",
+            "street": "Alameda Arpo, 1929 - Costeira (anexo ao Jacomar, loja 3)",
+            "locality": "São José dos Pinhais",
+            "region": "PR",
+            "postal_code": "83010-290",
+            "whatsapp_url": "https://wa.me/554184329935",
+            "map_url": "https://www.google.com/maps/search/?api=1&query=Alameda+Arpo+1929+Costeira+Sao+Jose+dos+Pinhais+PR",
+            "hours_schema": "Mo-Sa 10:00-14:00, Mo-Sa 15:00-20:00"
+          }
+        }
+      },
+      "block_order": [
+        "loja-maestro",
+        "loja-novo-mundo",
+        "loja-br277",
+        "loja-guatupe",
+        "loja-costeira"
+      ],
+      "settings": {
+        "anchor_id": "lojas",
+        "eyebrow": "Onde estamos",
+        "heading": "Nossas lojas ficam anexas ao Jacomar",
+        "description": "São cinco unidades anexas ao supermercado Jacomar, em Curitiba e região metropolitana. Todas com estacionamento e segurança para você deixar seu equipamento com tranquilidade. Se preferir, agende para ser atendido na hora."
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "t-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Atendimento ótimo, tiraram todas as minhas dúvidas e explicaram o serviço com clareza.",
+            "author": "Nelson Souza",
+            "source": "Avaliação no Google",
+            "is_placeholder": false
+          }
+        },
+        "t-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Encontrei tudo o que precisava para o meu celular. Produtos de ótima qualidade, muita variedade e atendimento excelente!",
+            "author": "Elias Lopes",
+            "source": "Avaliação no Google",
+            "is_placeholder": false
+          }
+        },
+        "t-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Levei meu celular pela manhã e, no mesmo dia, ele já estava consertado. Atendimento rápido, cuidadoso e excelente!",
+            "author": "Magda Mendes da Silva",
+            "source": "Avaliação do Google",
+            "is_placeholder": false
+          }
+        }
+      },
+      "block_order": [
+        "t-1",
+        "t-2",
+        "t-3"
+      ],
+      "settings": {
+        "eyebrow": "Depoimentos",
+        "heading": "O que dizem nossos clientes",
+        "description": "Experiências reais de clientes atendidos nas lojas Especell em Curitiba e Região Metropolitana."
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "f-1": {
+          "type": "faq",
+          "settings": {
+            "question": "Quais aparelhos vocês consertam?",
+            "answer": "<p>Celulares, notebooks, computadores e consoles, além de serviços de informática em geral.</p>"
+          }
+        },
+        "f-2": {
+          "type": "faq",
+          "settings": {
+            "question": "Vocês atendem todas as marcas?",
+            "answer": "<p>Sim. Trabalhamos com aparelhos de todos os fabricantes.</p>"
+          }
+        },
+        "f-3": {
+          "type": "faq",
+          "settings": {
+            "question": "Como funciona o atendimento?",
+            "answer": "<p>Primeiro fazemos a avaliação do aparelho, depois passamos o orçamento. O conserto só é feito após a sua aprovação.</p>"
+          }
+        },
+        "f-4": {
+          "type": "faq",
+          "settings": {
+            "question": "Onde ficam as lojas?",
+            "answer": "<p>Todas as nossas unidades ficam anexas ao supermercado Jacomar, uma em cada loja: Maestro, Novo Mundo e BR277 em Curitiba, e Guatupê e Costeira na região metropolitana.</p><p>Todas contam com estacionamento e segurança para você deixar seu equipamento com tranquilidade.</p>"
+          }
+        },
+        "f-5": {
+          "type": "faq",
+          "settings": {
+            "question": "A avaliação tem custo?",
+            "answer": "<p>Não. A avaliação do aparelho é gratuita. Você só decide se quer seguir depois de receber o orçamento.</p>"
+          }
+        },
+        "f-6": {
+          "type": "faq",
+          "settings": {
+            "question": "Qual o prazo de um conserto?",
+            "answer": "<p>A maioria dos consertos fica pronta em menos de 8 horas — muitos saem no mesmo momento. Reparos mais complexos, como placa ou aparelho que teve contato com líquido, podem levar mais tempo; o prazo é informado no orçamento.</p><p>Você também pode agendar para ser atendido na hora.</p>"
+          }
+        },
+        "f-7": {
+          "type": "faq",
+          "settings": {
+            "question": "Os serviços têm garantia?",
+            "answer": "<p>Sim. Os reparos têm 90 dias de garantia sobre o serviço executado: se o aparelho voltar a apresentar o mesmo problema, a gente resolve.</p><p>A garantia não cobre danos novos, como queda, impacto ou contato com líquido depois da retirada.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "f-1",
+        "f-2",
+        "f-3",
+        "f-4",
+        "f-5",
+        "f-6",
+        "f-7"
+      ],
+      "settings": {
+        "anchor_id": "faq",
+        "eyebrow": "Perguntas frequentes",
+        "heading": "Dúvidas frequentes",
+        "description": "Não encontrou o que procurava? Fale com a loja mais próxima de você.",
+        "cta_label": "Falar com a Especell",
+        "cta_url": ""
+      }
+    },
+    "cta": {
+      "type": "cta",
+      "settings": {
+        "eyebrow": "Atendimento",
+        "heading": "Quebrou? Estragou? Não está carregando?",
+        "description": "Fale com a loja Especell mais próxima de você e descubra o que dá para fazer pelo seu aparelho.",
+        "button_label": "Falar no WhatsApp",
+        "button_url": "",
+        "secondary_label": "Ver nossas lojas",
+        "secondary_url": "#lojas"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "brands",
+    "services",
+    "how",
+    "about",
+    "stores",
+    "testimonials",
+    "faq",
+    "cta"
+  ]
+}

@@ -1,0 +1,99 @@
+{% comment %}
+  Default template for plain pages — contact, and anything else created in the
+  admin without a specific template.
+
+  It borrows the service page's shell on purpose: same dark header, same body
+  treatment. That means one implementation carries the accent rules on
+  headings, the styled lists, the sticky index and the question accordion, and
+  a page written in the admin arrives looking like the rest of the site with no
+  extra work. Before this, a page here rendered as a bare h1 and raw text.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
+{% endcomment %}
+
+<section class="service-hero bg-ink full-width">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="service-hero__glow"></div>
+  </div>
+
+  <div class="section__inner service-hero__inner">
+    <nav class="service-hero__crumbs" aria-label="Você está aqui">
+      <a href="{{ routes.root_url }}">Início</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ page.title }}</span>
+    </nav>
+
+    <div data-animate>
+      <h1 class="service-hero__title">{{ page.title }}</h1>
+
+      {% if settings.whatsapp_url != blank %}
+        <div class="service-hero__actions">
+          <a
+            href="{% render 'whatsapp-link' %}"
+            class="btn btn--accent"
+            data-magnetic
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ 'icon-whatsapp.svg' | inline_asset_content }}
+            Falar no WhatsApp
+          </a>
+          <a href="{{ routes.root_url }}#lojas" class="btn btn--outline">Ver as 5 lojas</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="service-body section full-width">
+  <div class="section__inner service-body__inner">
+    <article class="service-body__content rte" data-animate>
+      {{ page.content }}
+    </article>
+
+    <aside class="service-body__aside" data-animate>
+      <div class="card card--dark service-aside">
+        <p class="service-aside__title">Precisa de ajuda?</p>
+        <p class="service-aside__text">
+          Chame no WhatsApp e diga o que houve com o aparelho. A gente te responde no mesmo dia.
+        </p>
+        {% if settings.whatsapp_url != blank %}
+          <a
+            href="{% render 'whatsapp-link' %}"
+            class="btn btn--accent btn--sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ 'icon-whatsapp.svg' | inline_asset_content }}
+            Falar no WhatsApp
+          </a>
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+</section>
+
+{% comment %}
+  Breadcrumb markup, same as the service pages: it turns the grey URL line in
+  Google results into "especell.com.br > Contato" instead of a raw path.
+{% endcomment %}
+{%- if page.title != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Início", "item": {{ request.origin | json }} },
+        { "@type": "ListItem", "position": 2, "name": {{ page.title | json }}, "item": {{ canonical_url | json }} }
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:general.page",
+  "settings": []
+}
+{% endschema %}

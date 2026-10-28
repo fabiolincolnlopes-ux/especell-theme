@@ -1,0 +1,28 @@
+# Arquivos ignorados pelo Shopify CLI (push, pull, dev).
+#
+# IMPORTANTE — por que estes estao aqui:
+#
+# `shopify theme push` sobrescreve o tema remoto com os arquivos locais.
+# Os arquivos abaixo guardam o CONTEUDO editado no painel da Shopify:
+# textos, fotos enviadas, logo, CSS personalizado, configuracoes de secao.
+#
+# Sem esta protecao, qualquer push feito depois apagaria o trabalho feito
+# no editor (o logo da Especell e o CSS de tamanho dele, por exemplo).
+#
+# Divisao de responsabilidade:
+#   - Codigo (liquid, css, js)  -> editado aqui, enviado via push
+#   - Conteudo (textos, fotos)  -> editado no painel da Shopify
+#
+# Se um dia for preciso enviar mudanca de estrutura nestes arquivos:
+#   1. `shopify theme pull --path <pasta temporaria>` para baixar o estado real
+#   2. Comparar com o local e confirmar que nao ha edicoes do painel a perder
+#   3. Liberar o arquivo aqui, enviar, e recolocar a protecao
+#
+# ATENCAO — bug ja encontrado nesta loja: se o envio adicionar um CAMPO NOVO
+# a uma secao, envie PRIMEIRO o .liquid (schema) e so depois o template que
+# usa esse campo. A Shopify descarta silenciosamente valores de campos que
+# ainda nao existem no schema remoto, e o envio reporta "sucesso" mesmo assim.
+
+templates/*.json
+config/settings_data.json
+sections/*-group.json

@@ -1,0 +1,385 @@
+{%- liquid
+  assign anchor = section.settings.anchor_id | default: 'lojas'
+-%}
+
+<section class="stores section full-width bg-ink" id="{{ anchor }}">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="fx-glow"></div>
+  </div>
+
+  <div class="section__inner">
+    <div class="section__intro section__intro--center" data-animate>
+      {% if section.settings.eyebrow != blank %}
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      <h2 class="section__title">{{ section.settings.heading | default: 'Nossas lojas' }}</h2>
+      {% if section.settings.description != blank %}
+        <p class="section__description">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+
+    <div class="stores__grid">
+      {% for block in section.blocks %}
+        {%- liquid
+          assign phone_digits = block.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.' | remove: '+'
+        -%}
+        <article class="stores__card card card--dark card--interactive" data-animate {{ block.shopify_attributes }}>
+          {% comment %}
+            Without a photo the frame is only rendered inside the theme editor.
+            On the published site an empty striped placeholder reads as "site
+            under construction" — to visitors and to ad review alike.
+          {% endcomment %}
+          {% if block.settings.image or request.design_mode %}
+            <div class="stores__media media-frame">
+              {% if block.settings.image %}
+                {{
+                  block.settings.image
+                  | image_url: width: 900
+                  | image_tag: alt: block.settings.name, loading: 'lazy', sizes: '(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw', widths: '400, 600, 900'
+                }}
+              {% else %}
+                <div class="media-placeholder">Envie aqui a foto da fachada</div>
+              {% endif %}
+
+              <div class="stores__tags">
+                {% if block.settings.city != blank %}
+                  <span class="stores__tag stores__tag--city">{{ block.settings.city }}</span>
+                {% endif %}
+                {% if block.settings.venue != blank %}
+                  <span class="stores__tag stores__tag--venue">{{ block.settings.venue }}</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="stores__body">
+            <h3 class="stores__name">{{ block.settings.name | default: 'Nome da loja' }}</h3>
+
+            {% comment %} With no photo the overlay tags are gone, so surface them here instead. {% endcomment %}
+            {% unless block.settings.image or request.design_mode %}
+              <div class="stores__tags stores__tags--inline">
+                {% if block.settings.city != blank %}
+                  <span class="stores__tag stores__tag--city">{{ block.settings.city }}</span>
+                {% endif %}
+                {% if block.settings.venue != blank %}
+                  <span class="stores__tag stores__tag--venue stores__tag--venue-solid">{{ block.settings.venue }}</span>
+                {% endif %}
+              </div>
+            {% endunless %}
+
+            {% if block.settings.address != blank %}
+              <p class="stores__address">
+                <span class="stores__meta-icon">{{ 'icon-map-pin.svg' | inline_asset_content }}</span>
+                <span>{{ block.settings.address }}</span>
+              </p>
+            {% endif %}
+
+            {% if block.settings.hours != blank %}
+              <p class="stores__hours">
+                <span class="stores__meta-icon">{{ 'icon-clock.svg' | inline_asset_content }}</span>
+                <span>{{ block.settings.hours }}</span>
+              </p>
+            {% endif %}
+
+            {% if block.settings.phone != blank %}
+              <a href="tel:{{ phone_digits }}" class="stores__phone">
+                <span class="stores__meta-icon">{{ 'icon-phone.svg' | inline_asset_content }}</span>
+                <span>{{ block.settings.phone }}</span>
+              </a>
+            {% endif %}
+
+            <div class="stores__actions">
+              {% if block.settings.whatsapp_url != blank %}
+                <a
+                  href="{% render 'whatsapp-link', url: block.settings.whatsapp_url, store: block.settings.name %}"
+                  class="btn btn--accent btn--sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ 'icon-whatsapp.svg' | inline_asset_content }}
+                  WhatsApp
+                </a>
+              {% endif %}
+              {% if block.settings.map_url != blank %}
+                <a
+                  href="{{ block.settings.map_url }}"
+                  class="btn btn--outline btn--sm stores__map-btn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Como chegar
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% comment %}
+  Structured data: one LocalBusiness per unit, so Google can surface each
+  store with its own address and phone. Emitted only when the merchant has
+  filled the structured address fields — partial data is worse than none,
+  since Search Console flags incomplete entities as errors.
+{% endcomment %}
+{%- capture stores_json -%}
+  [
+  {%- assign emitted = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.street != blank and block.settings.locality != blank -%}
+      {%- if emitted > 0 -%},{%- endif -%}
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": {{ block.settings.name | json }},
+        {%- if block.settings.image %}
+        "image": {{ block.settings.image | image_url: width: 1200 | prepend: 'https:' | json }},
+        {%- endif %}
+        {%- if block.settings.phone != blank %}
+        "telephone": {{ block.settings.phone | json }},
+        {%- endif %}
+        {%- comment -%}
+          schema.org expects a machine format ("Mo-Sa 10:00-14:00"), not the
+          friendly text shown on the card. Emitted only from the dedicated
+          field — feeding it free text would produce an invalid entity, which
+          Search Console reports as an error.
+        {%- endcomment -%}
+        {%- if block.settings.hours_schema != blank -%}
+          {%- assign spans = block.settings.hours_schema | split: ',' -%}
+          "openingHours": [
+            {%- for span in spans -%}
+              {%- if forloop.index0 > 0 -%},{%- endif -%}
+              {{ span | strip | json }}
+            {%- endfor -%}
+          ],
+        {%- endif %}
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": {{ block.settings.street | json }},
+          "addressLocality": {{ block.settings.locality | json }},
+          "addressRegion": {{ block.settings.region | default: 'PR' | json }},
+          {%- if block.settings.postal_code != blank %}
+          "postalCode": {{ block.settings.postal_code | json }},
+          {%- endif %}
+          "addressCountry": "BR"
+        },
+        "url": {{ request.origin | append: page.url | json }},
+        "parentOrganization": {
+          "@type": "Organization",
+          "name": {{ settings.brand_name | default: shop.name | json }}
+        }
+      }
+      {%- assign emitted = emitted | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+  ]
+{%- endcapture -%}
+
+{%- assign stores_json = stores_json | strip -%}
+{%- unless stores_json == '[]' -%}
+  <script type="application/ld+json">{{ stores_json }}</script>
+{%- endunless -%}
+
+{% stylesheet %}
+  .stores {
+    position: relative;
+    overflow: hidden;
+  }
+  .stores .section__inner {
+    position: relative;
+  }
+  .stores__grid {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .stores__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .stores__media {
+    aspect-ratio: 4 / 3;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Slow push-in on the storefront photo. The card already clips, but this
+     frame clips too so the image cannot bleed over the tags sitting on it. */
+  .stores__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .stores__card:hover .stores__media img {
+    transform: scale(1.07);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stores__media img {
+      transition: none;
+    }
+    .stores__card:hover .stores__media img {
+      transform: none;
+    }
+  }
+  .stores__tags {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    right: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .stores__tag {
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .stores__tag--city {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+  /* Secondary tag: readable over a photo without competing with the city */
+  .stores__tag--venue {
+    background-color: color-mix(in srgb, var(--color-ink) 82%, transparent);
+    color: #fff;
+    border: 1px solid color-mix(in srgb, #fff 30%, transparent);
+    backdrop-filter: blur(4px);
+  }
+  /* Same tags, but sitting in the card body when there is no photo above */
+  .stores__tags--inline {
+    position: static;
+    margin-top: 0.9rem;
+  }
+  .stores__tag--venue-solid {
+    background-color: transparent;
+    backdrop-filter: none;
+  }
+  .stores__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.5rem;
+  }
+  .stores__name {
+    font-size: 1.25rem;
+  }
+  .stores__address,
+  .stores__hours,
+  .stores__phone {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: color-mix(in srgb, #fff 62%, transparent);
+    text-decoration: none;
+  }
+  .stores__phone {
+    font-weight: 700;
+    color: #fff;
+    transition: color 0.2s ease;
+  }
+  .stores__phone:hover {
+    color: var(--color-accent);
+  }
+  .stores__meta-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    margin-top: 0.1rem;
+  }
+  .stores__meta-icon svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-accent);
+  }
+  .stores__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+  .stores__map-btn {
+    color: #fff;
+  }
+  /* Striped placeholder needs to invert on the dark card */
+  .stores__card .media-placeholder {
+    background: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, #fff 7%, transparent) 0 12px,
+      transparent 12px 24px
+    );
+    color: color-mix(in srgb, #fff 45%, transparent);
+  }
+
+  @media (min-width: 40rem) {
+    .stores__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .stores__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Nossas lojas",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "ID da âncora", "default": "lojas" },
+    { "type": "text", "id": "eyebrow", "label": "Texto de destaque", "default": "Onde estamos" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Nossas lojas" },
+    { "type": "textarea", "id": "description", "label": "Descrição" }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "Loja",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Foto da fachada" },
+        { "type": "text", "id": "name", "label": "Nome da loja", "default": "Nome da loja" },
+        { "type": "text", "id": "city", "label": "Cidade / etiqueta" },
+        { "type": "text", "id": "venue", "label": "Etiqueta secundária", "info": "Ex.: Dentro do Jacomar" },
+        { "type": "textarea", "id": "address", "label": "Endereço (mostrado no site)" },
+        { "type": "text", "id": "hours", "label": "Horário de funcionamento" },
+        { "type": "text", "id": "phone", "label": "Telefone" },
+        {
+          "type": "header",
+          "content": "Endereço para o Google",
+          "info": "Preenchendo estes campos, o Google pode mostrar a loja com endereço e telefone direto no resultado de busca."
+        },
+        {
+          "type": "text",
+          "id": "hours_schema",
+          "label": "Horário no formato do Google",
+          "info": "Ex.: Mo-Sa 10:00-14:00, Mo-Sa 15:00-20:00 — separe faixas por vírgula. Deixe vazio se não souber."
+        },
+        { "type": "text", "id": "street", "label": "Rua e número" },
+        { "type": "text", "id": "locality", "label": "Cidade" },
+        { "type": "text", "id": "region", "label": "Estado (sigla)", "default": "PR" },
+        { "type": "text", "id": "postal_code", "label": "CEP" },
+        { "type": "url", "id": "whatsapp_url", "label": "Link do WhatsApp" },
+        { "type": "url", "id": "map_url", "label": "Link do mapa" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nossas lojas",
+      "blocks": [{ "type": "store" }, { "type": "store" }, { "type": "store" }]
+    }
+  ]
+}
+{% endschema %}

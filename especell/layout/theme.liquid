@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {% comment %}
+      Marks that scripting is available BEFORE first paint. The reveal
+      animations start at opacity:0, so without this flag a visitor (or a
+      crawler) with no JS would see an empty page. CSS only hides the
+      animated elements when this class is present.
+    {% endcomment %}
+    <script>document.documentElement.classList.add('js');</script>
+
+    {% # Inlined CSS Variables %}
+    {% render 'css-variables' %}
+
+    {% comment %}
+      Font preloading:
+      1. Preconnect to font CDN for faster connection
+      2. Preload only the critical font variant (base weight)
+      3. Additional variants load on-demand via @font-face
+    {% endcomment %}
+    {% unless settings.type_primary_font.system? %}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
+      {% comment %} Preload the base font variant for initial page render {% endcomment %}
+      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {% endunless %}
+
+    {% # Load and preload the critical CSS %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {% comment %} Merchant-uploaded favicon wins; the bundled SVG is the fallback. {% endcomment %}
+    {% if settings.favicon %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 96, height: 96 }}">
+    {% else %}
+      <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+    {% endif %}
+
+    {% # Social, title, etc. %}
+    {% render 'meta-tags' %}
+
+    {% # Google Ads / GA4 — inert until the IDs are filled in theme settings %}
+    {% render 'tracking' %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    {% if settings.show_progress_bar %}
+      {% comment %} Decorative only — the scrollbar already conveys this to assistive tech. {% endcomment %}
+      <div class="reading-progress" aria-hidden="true">
+        <span data-reading-progress></span>
+      </div>
+    {% endif %}
+
+    {% sections 'header-group' %}
+
+    {{ content_for_layout }}
+
+    {% sections 'footer-group' %}
+
+    {% if settings.show_section_dots %}
+      {% comment %}
+        Filled by theme.js from the sections actually present on the page, so
+        adding or removing a section keeps this in sync with no code change.
+      {% endcomment %}
+      <nav class="section-dots" data-section-dots aria-label="Navegar entre seções"></nav>
+    {% endif %}
+
+    {% render 'floating-actions' %}
+    {% render 'mobile-bar' %}
+
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+  </body>
+</html>

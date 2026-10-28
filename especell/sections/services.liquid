@@ -1,0 +1,201 @@
+{%- liquid
+  assign anchor = section.settings.anchor_id | default: 'servicos'
+-%}
+
+<section class="services section full-width" id="{{ anchor }}">
+  <div class="section__inner">
+    <div class="section__intro section__intro--center" data-animate>
+      {% if section.settings.eyebrow != blank %}
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      <h2 class="section__title">{{ section.settings.heading | default: 'Nossos serviços' }}</h2>
+      {% if section.settings.description != blank %}
+        <p class="section__description">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+
+    <div class="services__grid">
+      {% for block in section.blocks %}
+        {%- comment -%}
+          A card with a link becomes the link itself: the whole card is the
+          target, which is a bigger tap area on a phone than a small "saiba
+          mais" would be. Without a link it stays a plain article, so nothing
+          changes for services that have no page of their own.
+        {%- endcomment -%}
+        {%- if block.settings.url != blank -%}
+          {%- assign card_tag = 'a' -%}
+        {%- else -%}
+          {%- assign card_tag = 'article' -%}
+        {%- endif -%}
+        <{{ card_tag }}
+          class="services__card card card--interactive{% if block.settings.url != blank %} services__card--link{% endif %}"
+          {% if block.settings.url != blank %}href="{{ block.settings.url }}"{% endif %}
+          data-animate
+          data-tilt
+          {{ block.shopify_attributes }}
+        >
+          <span class="icon-tile">
+            {% case block.settings.icon %}
+              {% when 'wrench' %}
+                {{ 'icon-wrench.svg' | inline_asset_content }}
+              {% when 'shield' %}
+                {{ 'icon-shield.svg' | inline_asset_content }}
+              {% when 'clock' %}
+                {{ 'icon-clock.svg' | inline_asset_content }}
+              {% when 'laptop' %}
+                {{ 'icon-laptop.svg' | inline_asset_content }}
+              {% when 'gamepad' %}
+                {{ 'icon-gamepad.svg' | inline_asset_content }}
+              {% else %}
+                {{ 'icon-wrench.svg' | inline_asset_content }}
+            {% endcase %}
+          </span>
+
+          <h3 class="services__card-title">{{ block.settings.title | default: 'Nome do serviço' }}</h3>
+
+          {% if block.settings.description != blank %}
+            <p class="services__card-text">{{ block.settings.description }}</p>
+          {% endif %}
+
+          {% if block.settings.note != blank %}
+            <p class="services__card-note">{{ block.settings.note }}</p>
+          {% endif %}
+          {% if block.settings.url != blank %}
+            <span class="services__card-go" aria-hidden="true">Ver detalhes &rarr;</span>
+          {% endif %}
+        </{{ card_tag }}>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.footnote != blank %}
+      <p class="services__footnote" data-animate>{{ section.settings.footnote }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .services {
+    background-color: var(--color-background);
+  }
+  .services__grid {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .services__card {
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+  .services__card-title {
+    margin-top: 1.35rem;
+    font-size: 1.2rem;
+  }
+  .services__card-text {
+    margin-top: 0.65rem;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+  .services__card-note {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+    font-family: var(--font-heading--family);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+  .services__footnote {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.88rem;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+
+  @media (min-width: 40rem) {
+    .services__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .services__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .services__card--link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  .services__card-go {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    transition: color 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .services__card--link:hover .services__card-go {
+    color: var(--color-ink);
+    transform: translateX(4px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Serviços",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "ID da âncora", "default": "servicos" },
+    { "type": "text", "id": "eyebrow", "label": "Texto de destaque", "default": "O que fazemos" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Nossos serviços" },
+    { "type": "textarea", "id": "description", "label": "Descrição" },
+    { "type": "text", "id": "footnote", "label": "Observação no rodapé da seção" }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Serviço",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone",
+          "options": [
+            { "value": "wrench", "label": "Ferramenta" },
+            { "value": "shield", "label": "Garantia" },
+            { "value": "clock", "label": "Relógio" },
+            { "value": "laptop", "label": "Notebook" },
+            { "value": "gamepad", "label": "Console" }
+          ],
+          "default": "wrench"
+        },
+        { "type": "text", "id": "title", "label": "Nome do serviço", "default": "Nome do serviço" },
+        { "type": "textarea", "id": "description", "label": "Descrição" },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Rodapé do card",
+          "info": "Ex.: prazo ou condição. Deixe em branco se não quiser."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Página deste serviço",
+          "info": "Aponte para a página de serviço. Com link, o card inteiro vira clicável."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Serviços",
+      "blocks": [{ "type": "service" }, { "type": "service" }, { "type": "service" }]
+    }
+  ]
+}
+{% endschema %}

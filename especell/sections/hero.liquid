@@ -1,0 +1,480 @@
+<section class="hero bg-ink full-width">
+  {% comment %}
+    The stage clips the animated backdrop and the diagonal accents, so they
+    never bleed over the stat strip below it.
+  {% endcomment %}
+  <div class="hero__stage">
+    <div class="fx-bg" aria-hidden="true">
+      <div class="fx-grid"></div>
+      <div class="fx-glow"></div>
+      {% comment %} Follows the mouse on desktop and the finger on touch. {% endcomment %}
+      <div class="hero__spotlight" data-spotlight></div>
+      <div class="hero__slash"></div>
+      <div class="hero__edge"></div>
+    </div>
+
+    <div class="hero__inner">
+      <div class="hero__copy">
+        {% if section.settings.eyebrow != blank %}
+          <span class="eyebrow" data-animate>{{ section.settings.eyebrow }}</span>
+        {% endif %}
+
+        <h1 class="hero__title" data-animate>
+          {{ section.settings.heading | default: 'Título de impacto sobre o seu negócio' }}
+        </h1>
+
+        {% if section.settings.description != blank %}
+          <p class="hero__description" data-animate>{{ section.settings.description }}</p>
+        {% endif %}
+
+        <div class="hero__actions" data-animate>
+          {% if section.settings.primary_label != blank %}
+            {%- comment -%}
+              The halo lives on a wrapper, not on the button: .btn carries
+              overflow:hidden for its wipe-fill, which would clip any glow
+              drawn on the button itself.
+            {%- endcomment -%}
+            <span class="hero__cta-halo">
+              <a
+                href="{% render 'whatsapp-link', url: section.settings.primary_url %}"
+                class="btn btn--accent"
+                data-magnetic
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ section.settings.primary_label }}
+                {{ 'icon-arrow-right.svg' | inline_asset_content }}
+              </a>
+            </span>
+          {% endif %}
+          {% if section.settings.secondary_label != blank %}
+            <a href="{{ section.settings.secondary_url | default: '#' }}" class="btn btn--outline">
+              {{ section.settings.secondary_label }}
+            </a>
+          {% endif %}
+        </div>
+
+        {% comment %}
+          Trust line sits right under the buttons: the moment the visitor is
+          deciding whether to click is the moment to remove friction.
+        {% endcomment %}
+        {%- assign trust_items = section.settings.trust_1 | append: '|' | append: section.settings.trust_2 | append: '|' | append: section.settings.trust_3 | append: '|' | append: section.settings.trust_4 | split: '|' -%}
+        {% if trust_items.size > 0 %}
+          <ul class="hero__trust" data-animate>
+            {% for item in trust_items %}
+              {%- assign item = item | strip -%}
+              {% unless item == blank %}
+                <li>{{ 'icon-check.svg' | inline_asset_content }}<span>{{ item }}</span></li>
+              {% endunless %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if section.settings.image or request.design_mode %}
+        <div class="hero__media" data-animate>
+          {% if section.settings.image %}
+            {%- comment -%}
+              A filter cannot be nested inside a filter argument, so the alt
+              fallback is resolved first. Empty alt on the largest image costs
+              both accessibility and image search.
+            {%- endcomment -%}
+            {%- assign hero_alt = section.settings.image.alt | default: 'Técnico da Especell consertando celular em Curitiba' -%}
+            <div class="hero__media-frame">
+              <div class="hero__media-inner" data-parallax data-parallax-speed="0.06" data-parallax-scale="1.12">
+                {{
+                  section.settings.image
+                  | image_url: width: 1400
+                  | image_tag: alt: hero_alt, loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 64rem) 45vw, 100vw', widths: '600, 900, 1400'
+                }}
+              </div>
+            </div>
+          {% else %}
+            <div class="hero__media-frame hero__media-frame--empty">
+              <div class="media-placeholder media-placeholder--dark">
+                Envie aqui a foto de destaque
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if section.blocks.size > 0 %}
+    <div class="hero__stats">
+      <div class="hero__stats-inner">
+        {% for block in section.blocks %}
+          {%- comment -%}
+            The first stat is the headline claim, so it gets the featured
+            treatment automatically — no toggle for the merchant to forget.
+          {%- endcomment -%}
+          <div
+            class="hero__stat{% if forloop.first %} hero__stat--featured{% endif %}"
+            data-animate
+            {{ block.shopify_attributes }}
+          >
+            {% if block.settings.kicker != blank %}
+              <span class="hero__stat-kicker">{{ block.settings.kicker }}</span>
+            {% endif %}
+
+            <p class="hero__stat-value">
+              {%- if block.settings.value != blank -%}
+                <span data-counter="{{ block.settings.value }}">{{ block.settings.value }}</span>
+              {%- endif -%}
+              {{- block.settings.suffix -}}
+            </p>
+
+            <span class="hero__stat-rule" aria-hidden="true"></span>
+            <p class="hero__stat-label">{{ block.settings.label }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .hero {
+    position: relative;
+  }
+
+  .hero__stage {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Soft light that tracks the pointer. Position comes from --sx/--sy, set by
+     theme.js; it lerps toward the target so the light glides instead of
+     snapping. Starts centred so it looks intentional before any input. */
+  .hero__spotlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34rem;
+    height: 34rem;
+    margin: -17rem 0 0 -17rem;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-accent) 22%, transparent) 0%,
+      color-mix(in srgb, var(--color-accent) 8%, transparent) 35%,
+      transparent 68%
+    );
+    transform: translate3d(var(--sx, 50vw), var(--sy, 50%), 0);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    will-change: transform;
+    pointer-events: none;
+  }
+  .hero__spotlight.is-lit {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__spotlight {
+      display: none;
+    }
+  }
+
+  /* No pointer, no spotlight. Drifting it on scroll looked like a stray blob. */
+  @media (hover: none) {
+    .hero__spotlight {
+      display: none;
+    }
+  }
+
+  /* What replaces the spotlight on a phone: a slow breath behind the primary
+     action. It needs no input, so it can never end up in a wrong place, and
+     it pulls the thumb toward the button that starts a conversation. */
+  .hero__cta-halo {
+    position: relative;
+    display: inline-flex;
+  }
+  .hero__cta-halo::before {
+    content: "";
+    position: absolute;
+    inset: -18px;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-accent) 32%, transparent) 0%,
+      transparent 68%
+    );
+  }
+
+  @media (hover: none) and (prefers-reduced-motion: no-preference) {
+    .hero__cta-halo::before {
+      animation: hero-cta-breathe 3.2s ease-in-out infinite;
+    }
+  }
+
+  @keyframes hero-cta-breathe {
+    0%,
+    100% {
+      opacity: 0.25;
+      transform: scale(0.94);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.06);
+    }
+  }
+
+  /* Diagonal accent wash on the right side */
+  .hero__slash {
+    position: absolute;
+    top: -10%;
+    right: -12%;
+    height: 120%;
+    width: 46%;
+    background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    transform: skewX(-11deg);
+  }
+  .hero__edge {
+    position: absolute;
+    top: -10%;
+    right: 18%;
+    height: 120%;
+    width: 3px;
+    background-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    transform: skewX(-11deg);
+  }
+
+  .hero__inner {
+    position: relative;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(3.5rem, 7vw, 6rem) var(--page-margin) clamp(2.5rem, 5vw, 4rem);
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .hero__title {
+    max-width: 20ch;
+    font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+    margin-top: 1.4rem;
+  }
+  .hero__description {
+    max-width: 46ch;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: color-mix(in srgb, #fff 72%, transparent);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.4rem;
+  }
+  .hero__actions .btn--outline {
+    color: #fff;
+  }
+
+  .hero__trust {
+    list-style: none;
+    margin: 1.6rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+  }
+  .hero__trust li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+    color: color-mix(in srgb, #fff 82%, transparent);
+  }
+  .hero__trust svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  .hero__media-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border: 2px solid color-mix(in srgb, #fff 14%, transparent);
+  }
+  .hero__media-inner {
+    height: 100%;
+  }
+  .hero__media-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .media-placeholder--dark {
+    aspect-ratio: auto;
+    height: 100%;
+    background: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, #fff 7%, transparent) 0 12px,
+      transparent 12px 24px
+    );
+    color: color-mix(in srgb, #fff 50%, transparent);
+  }
+
+  /* Stat strip: solid band under the stage, lifted slightly off pure black */
+  .hero__stats {
+    position: relative;
+    background-color: color-mix(in srgb, #fff 4%, var(--color-ink));
+    border-top: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+  .hero__stats-inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(1.75rem, 3vw, 2.75rem) var(--page-margin);
+    display: grid;
+    /* auto-fit so the strip adapts if a stat is added or removed later.
+       No `fr` sibling here — that combination is invalid and gets dropped. */
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 1.5rem 1.25rem;
+  }
+
+  .hero__stat {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+  /* Divider that draws downward as the strip reveals */
+  .hero__stat::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 0;
+    background-color: color-mix(in srgb, #fff 18%, transparent);
+    transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s;
+  }
+  .hero__stat.is-visible::before {
+    height: 100%;
+  }
+  .hero__stat:first-child {
+    padding-left: 0;
+  }
+  .hero__stat:first-child::before {
+    display: none;
+  }
+
+  .hero__stat-kicker {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: color-mix(in srgb, var(--color-accent) 80%, transparent);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero__stat-value {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 5.5vw, 3.4rem);
+    line-height: 1;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+    transition: text-shadow 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Headline stat: bigger, and underlined by a bar that grows in */
+  .hero__stat--featured .hero__stat-value {
+    font-size: clamp(2.6rem, 8vw, 4.6rem);
+  }
+  .hero__stat--featured .hero__stat-label {
+    color: color-mix(in srgb, #fff 85%, transparent);
+    font-weight: 600;
+  }
+
+  .hero__stat-rule {
+    display: block;
+    height: 3px;
+    width: 0;
+    margin-top: 0.7rem;
+    background-color: var(--color-accent);
+    transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s;
+  }
+  .hero__stat.is-visible .hero__stat-rule {
+    width: 2rem;
+  }
+  .hero__stat--featured.is-visible .hero__stat-rule {
+    width: 4.5rem;
+  }
+
+  .hero__stat-label {
+    margin-top: 0.55rem;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: color-mix(in srgb, #fff 62%, transparent);
+    transition: color 0.3s ease;
+  }
+
+  .hero__stat:hover .hero__stat-value {
+    transform: translateY(-2px);
+    text-shadow: 0 0 26px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  }
+  .hero__stat:hover .hero__stat-label {
+    color: #fff;
+  }
+
+  @media (min-width: 64rem) {
+    /* Only split into two columns when there is actually media to show */
+    .hero__inner:has(.hero__media) {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+    .hero__inner {
+      padding-block: clamp(4.5rem, 7vw, 7rem) clamp(3rem, 5vw, 4.5rem);
+    }
+    .hero__stat-label {
+      font-size: 0.82rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Topo (Hero)",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto de destaque" },
+    { "type": "text", "id": "heading", "label": "Título" },
+    { "type": "textarea", "id": "description", "label": "Descrição" },
+    { "type": "image_picker", "id": "image", "label": "Imagem de destaque" },
+    { "type": "header", "content": "Linha de confiança (abaixo dos botões)" },
+    { "type": "text", "id": "trust_1", "label": "Item 1" },
+    { "type": "text", "id": "trust_2", "label": "Item 2" },
+    { "type": "text", "id": "trust_3", "label": "Item 3" },
+    { "type": "text", "id": "trust_4", "label": "Item 4" },
+    { "type": "header", "content": "Botão principal" },
+    { "type": "text", "id": "primary_label", "label": "Texto do botão", "default": "Fazer orçamento" },
+    { "type": "url", "id": "primary_url", "label": "Link do botão" },
+    { "type": "header", "content": "Botão secundário" },
+    { "type": "text", "id": "secondary_label", "label": "Texto do botão", "default": "Ver serviços" },
+    { "type": "url", "id": "secondary_url", "label": "Link do botão" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Número em destaque",
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Chamada (acima do número)", "info": "Ex.: MAIS DE" },
+        { "type": "text", "id": "value", "label": "Número", "info": "Somente dígitos — ele conta na tela.", "default": "15" },
+        { "type": "text", "id": "suffix", "label": "Sufixo", "info": "Ex.: + ou anos. Deixe vazio se não quiser." },
+        { "type": "text", "id": "label", "label": "Legenda", "default": "Anos de mercado" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Topo (Hero)",
+      "blocks": [{ "type": "stat" }, { "type": "stat" }, { "type": "stat" }]
+    }
+  ]
+}
+{% endschema %}

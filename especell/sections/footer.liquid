@@ -1,0 +1,233 @@
+<footer class="site-footer bg-ink full-width">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      {% if section.settings.logo %}
+        {{ section.settings.logo | image_url: width: 340 | image_tag: alt: shop.name, loading: 'lazy', class: 'site-footer__logo' }}
+      {% else %}
+        <p class="site-footer__name">{{ shop.name | default: 'Especell' }}</p>
+      {% endif %}
+
+      {% if section.settings.tagline != blank %}
+        <p class="site-footer__tagline">{{ section.settings.tagline }}</p>
+      {% endif %}
+
+      <div class="site-footer__social">
+        {% if settings.whatsapp_url != blank %}
+          <a href="{% render 'whatsapp-link' %}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            {{ 'icon-whatsapp.svg' | inline_asset_content }}
+          </a>
+        {% endif %}
+        {% if section.settings.instagram_url != blank %}
+          <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            {{ 'icon-instagram.svg' | inline_asset_content }}
+          </a>
+        {% endif %}
+        {% if settings.phone_number != blank %}
+          <a
+            href="tel:{{ settings.phone_number | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.' }}"
+            aria-label="Telefone"
+          >
+            {{ 'icon-phone.svg' | inline_asset_content }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% for block in section.blocks %}
+      <div class="site-footer__column" {{ block.shopify_attributes }}>
+        {% if block.settings.title != blank %}
+          <p class="site-footer__column-title">{{ block.settings.title }}</p>
+        {% endif %}
+
+        {% if block.settings.menu != blank %}
+          <ul class="site-footer__menu">
+            {% for link in block.settings.menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if block.settings.text != blank %}
+          <div class="site-footer__text rte">{{ block.settings.text }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% comment %}
+    Policy links render themselves once the merchant publishes each policy in
+    Shopify settings. Google Ads commonly requires a reachable privacy policy.
+  {% endcomment %}
+  {%- assign policies = shop.policies | where: 'body' -%}
+  {% if policies.size > 0 %}
+    <div class="site-footer__policies">
+      {% for policy in policies %}
+        <a href="{{ policy.url }}">{{ policy.title }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="site-footer__bottom">
+    <span>
+      &copy; {{ 'now' | date: '%Y' }}
+      {{ settings.brand_name | default: shop.name }}. Todos os direitos reservados.
+    </span>
+    {% if section.settings.legal_note != blank %}
+      <span class="site-footer__legal">{{ section.settings.legal_note }}</span>
+    {% endif %}
+  </div>
+</footer>
+
+{% stylesheet %}
+  .site-footer__inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(3rem, 6vw, 4.5rem) var(--page-margin) 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .site-footer__logo {
+    max-height: 3rem;
+    width: auto;
+  }
+  .site-footer__name {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .site-footer__tagline {
+    margin-top: 0.85rem;
+    max-width: 30ch;
+    color: color-mix(in srgb, #fff 62%, transparent);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .site-footer__social {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+  .site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid color-mix(in srgb, #fff 20%, transparent);
+    color: #fff;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .site-footer__social a:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-ink);
+    transform: translateY(-3px);
+  }
+  .site-footer__social svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .site-footer__column-title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+  }
+  .site-footer__menu {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .site-footer__menu a {
+    color: color-mix(in srgb, #fff 72%, transparent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+  .site-footer__menu a:hover {
+    color: var(--color-accent);
+  }
+  .site-footer__text {
+    margin-top: 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, #fff 62%, transparent);
+  }
+
+  .site-footer__policies {
+    border-top: 1px solid color-mix(in srgb, #fff 10%, transparent);
+    padding: 1rem var(--page-margin) 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+  }
+  .site-footer__policies a {
+    color: color-mix(in srgb, #fff 60%, transparent);
+    text-decoration: none;
+    font-size: 0.78rem;
+  }
+  .site-footer__policies a:hover {
+    color: var(--color-accent);
+  }
+  .site-footer__policies + .site-footer__bottom {
+    border-top: none;
+  }
+
+  .site-footer__bottom {
+    border-top: 1px solid color-mix(in srgb, #fff 10%, transparent);
+    padding: 1.35rem var(--page-margin);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.5rem;
+    text-align: center;
+    font-size: 0.76rem;
+    color: color-mix(in srgb, #fff 45%, transparent);
+  }
+
+  @media (min-width: 48rem) {
+    /* auto-fit cannot share a track list with an `fr` column, so the brand
+       block widens by spanning two slots instead. */
+    .site-footer__inner {
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    }
+    .site-footer__brand {
+      grid-column: span 2;
+      max-width: 28rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Rodapé",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "textarea", "id": "tagline", "label": "Frase da marca" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram" },
+    { "type": "text", "id": "legal_note", "label": "Aviso legal" }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Coluna",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título da coluna" },
+        { "type": "link_list", "id": "menu", "label": "Menu" },
+        { "type": "richtext", "id": "text", "label": "Texto livre" }
+      ]
+    }
+  ]
+}
+{% endschema %}

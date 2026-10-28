@@ -1,0 +1,524 @@
+{% comment %}
+  Landing page for a single service (screen swap, battery, notebook, console).
+
+  Everything that CHANGES per service comes from the page itself — title, SEO
+  and body are written in the Shopify admin. Only the furniture that repeats on
+  every service page lives in section settings, because a static section in a
+  .liquid template is one shared instance: per-page values would bleed across
+  all four pages.
+
+  The WhatsApp message is derived from the page title, so a new service page
+  needs no theme change at all.
+{% endcomment %}
+
+{%- liquid
+  assign service_name = page.title | default: 'Assistência técnica'
+-%}
+
+<section class="service-hero bg-ink full-width">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="service-hero__glow"></div>
+  </div>
+
+  <div class="section__inner service-hero__inner">
+    <nav class="service-hero__crumbs" aria-label="Você está aqui">
+      <a href="{{ routes.root_url }}">Início</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ service_name }}</span>
+    </nav>
+
+    <div data-animate>
+      {% if section.settings.eyebrow != blank %}
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+
+      <h1 class="service-hero__title">{{ service_name }}</h1>
+
+      {% if page.metafields.custom.resumo != blank %}
+        <p class="service-hero__lead">{{ page.metafields.custom.resumo }}</p>
+      {% elsif section.settings.lead != blank %}
+        <p class="service-hero__lead">{{ section.settings.lead }}</p>
+      {% endif %}
+
+      <div class="service-hero__actions">
+        <a
+          href="{% render 'whatsapp-link', topic: service_name %}"
+          class="btn btn--accent"
+          data-magnetic
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ 'icon-whatsapp.svg' | inline_asset_content }}
+          {{ section.settings.button_label | default: 'Falar no WhatsApp' }}
+        </a>
+        <a href="{{ routes.root_url }}#lojas" class="btn btn--outline">Ver as 5 lojas</a>
+      </div>
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <ul class="service-hero__trust" data-animate>
+        {% for block in section.blocks %}
+          <li {{ block.shopify_attributes }}>
+            <span class="service-hero__trust-value">{{ block.settings.value }}</span>
+            <span class="service-hero__trust-label">{{ block.settings.label }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+<section class="service-body section full-width">
+  <div class="section__inner service-body__inner">
+    <article class="service-body__content rte" data-animate>
+      {% if page.content != blank %}
+        {{ page.content }}
+      {% else %}
+        {% comment %} Only the merchant sees this — never a live visitor. {% endcomment %}
+        {% if request.design_mode %}
+          <p class="media-placeholder">
+            Escreva o texto deste serviço em Loja virtual &rsaquo; Páginas.
+          </p>
+        {% endif %}
+      {% endif %}
+    </article>
+
+    <aside class="service-body__aside" data-animate>
+      <div class="card card--dark service-aside">
+        <p class="service-aside__title">{{ section.settings.aside_title | default: 'Orçamento sem compromisso' }}</p>
+        {% if section.settings.aside_text != blank %}
+          <p class="service-aside__text">{{ section.settings.aside_text }}</p>
+        {% endif %}
+        <a
+          href="{% render 'whatsapp-link', topic: service_name %}"
+          class="btn btn--accent btn--sm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ 'icon-whatsapp.svg' | inline_asset_content }}
+          {{ section.settings.button_label | default: 'Falar no WhatsApp' }}
+        </a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+{% comment %}
+  Service markup helps Google connect this page to the business and the city.
+  Emitted only with a real page title so an empty draft never publishes markup.
+{% endcomment %}
+{%- if page.title != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": {{ page.title | json }},
+      "serviceType": {{ page.title | json }},
+      "url": {{ canonical_url | json }},
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": {{ settings.brand_name | default: shop.name | json }},
+        "url": {{ request.origin | json }}
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Curitiba" },
+        { "@type": "City", "name": "São José dos Pinhais" }
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% comment %}
+  Breadcrumb markup turns the grey URL line in Google results into
+  "especell.com.br › Troca de tela..." — more readable, and it costs nothing.
+{% endcomment %}
+{%- if page.title != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Início", "item": {{ request.origin | json }} },
+        { "@type": "ListItem", "position": 2, "name": {{ page.title | json }}, "item": {{ canonical_url | json }} }
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% comment %}
+  FAQPage markup derived from the page body itself: every <h3> followed by a
+  paragraph becomes a question and its answer. Writing the FAQ in the admin is
+  therefore enough — no theme change when a new service page is added. A page
+  with no <h3> emits nothing, so this stays silent where it does not apply.
+{% endcomment %}
+{%- capture faq_entries -%}
+  {%- assign chunks = page.content | split: '<h3>' -%}
+  {%- assign emitted = 0 -%}
+  {%- for chunk in chunks offset: 1 -%}
+    {%- assign question = chunk | split: '</h3>' | first | strip_html | strip -%}
+    {%- assign tail = chunk | split: '</h3>' | last -%}
+    {%- assign answer = tail | split: '</p>' | first | strip_html | strip -%}
+    {%- if question != blank and answer != blank -%}
+      {%- if emitted > 0 -%},{%- endif -%}
+      {
+        "@type": "Question",
+        "name": {{ question | json }},
+        "acceptedAnswer": { "@type": "Answer", "text": {{ answer | json }} }
+      }
+      {%- assign emitted = emitted | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign faq_entries = faq_entries | strip -%}
+{%- if faq_entries != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{{ faq_entries }}]
+    }
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .service-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .service-hero__glow {
+    position: absolute;
+    top: -55%;
+    right: -10%;
+    width: min(42rem, 90%);
+    aspect-ratio: 1;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-accent) 16%, transparent) 0%,
+      transparent 62%
+    );
+  }
+  .service-hero__inner {
+    position: relative;
+  }
+  .service-hero__crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, #fff 55%, transparent);
+  }
+  .service-hero__crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .service-hero__crumbs a:hover {
+    color: var(--color-accent);
+  }
+  .service-hero__title {
+    margin-top: 1.1rem;
+    max-width: 20ch;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+  }
+  .service-hero__lead {
+    margin-top: 1.15rem;
+    max-width: 52ch;
+    color: color-mix(in srgb, #fff 72%, transparent);
+    line-height: 1.65;
+  }
+  .service-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.1rem;
+  }
+  .service-hero__actions .btn--outline {
+    color: #fff;
+  }
+
+  .service-hero__trust {
+    list-style: none;
+    margin: 2.75rem 0 0;
+    padding: 1.5rem 0 0;
+    border-top: 1px solid color-mix(in srgb, #fff 14%, transparent);
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+  .service-hero__trust-value {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-accent);
+  }
+  .service-hero__trust-label {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: color-mix(in srgb, #fff 62%, transparent);
+  }
+
+  .service-body__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    align-items: start;
+  }
+  .service-body__content {
+    max-width: 68ch;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .service-body__content h2 {
+    margin-top: 2.25rem;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+  }
+  .service-body__content h3 {
+    margin-top: 1.75rem;
+    font-size: 1.1rem;
+  }
+  .service-body__content p + p,
+  .service-body__content ul,
+  .service-body__content ol {
+    margin-top: 1rem;
+  }
+  .service-body__content ul,
+  .service-body__content ol {
+    padding-left: 1.2rem;
+  }
+  .service-body__content li + li {
+    margin-top: 0.45rem;
+  }
+
+  .service-aside {
+    padding: 1.75rem;
+  }
+  .service-aside__title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .service-aside__text {
+    margin-top: 0.85rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, #fff 70%, transparent);
+  }
+
+  @media (min-width: 64rem) {
+    .service-body__inner {
+      grid-template-columns: 1.6fr 0.9fr;
+    }
+  }
+
+  /* ------------------------------------------------------------------
+   * Admin-written body copy, promoted to the site's visual language.
+   * The merchant writes plain h2/ul/ol in the rich-text editor; the
+   * styling below is what turns that into something that matches the
+   * homepage without asking them to touch markup.
+   * ---------------------------------------------------------------- */
+  .service-body__content h2 {
+    position: relative;
+    padding-left: 1.15rem;
+  }
+  .service-body__content h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.18em;
+    bottom: 0.18em;
+    width: 4px;
+    background-color: var(--color-accent);
+  }
+
+  /* Bulleted lists become accent check marks */
+  .service-body__content ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .service-body__content ul li {
+    position: relative;
+    padding-left: 2rem;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .service-body__content ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.28em;
+    width: 1.15rem;
+    height: 1.15rem;
+    background-color: var(--color-accent);
+  }
+  .service-body__content ul li::after {
+    content: "";
+    position: absolute;
+    left: 0.42rem;
+    top: 0.47em;
+    width: 0.3rem;
+    height: 0.58rem;
+    border: solid var(--color-ink);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .service-body__content ul li:hover {
+    transform: translateX(4px);
+  }
+
+  /* Numbered lists become stepped cards */
+  .service-body__content ol {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: step;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .service-body__content ol li {
+    counter-increment: step;
+    position: relative;
+    margin: 0;
+    padding: 1rem 1.25rem 1rem 3.9rem;
+    background-color: #fff;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease;
+  }
+  .service-body__content ol li::before {
+    content: counter(step);
+    position: absolute;
+    left: 1.15rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--color-accent);
+  }
+  .service-body__content ol li:hover {
+    transform: translateX(5px);
+    border-color: var(--color-accent);
+  }
+
+  /* Questions lifted into the shared accordion styling */
+  .service-faq {
+    margin-top: 1.4rem;
+  }
+  .service-faq .faq__question h3 {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+  .service-faq .faq__answer p {
+    margin: 0;
+  }
+
+  /* Sticky index, desktop only — on a phone it would eat the whole screen */
+  .service-index {
+    display: none;
+  }
+  .service-index__title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+  .service-index ul {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    border-left: 2px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+  .service-index li + li {
+    margin-top: 0.15rem;
+  }
+  .service-index a {
+    display: block;
+    padding: 0.4rem 0 0.4rem 0.9rem;
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    font-size: 0.86rem;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .service-index a:hover {
+    color: var(--color-ink);
+    transform: translateX(2px);
+  }
+  .service-index a.is-active {
+    color: var(--color-ink);
+    font-weight: 700;
+    border-left-color: var(--color-accent);
+  }
+
+  @media (min-width: 64rem) {
+    .service-index {
+      display: block;
+      margin-bottom: 1.75rem;
+    }
+    .service-body__aside {
+      position: sticky;
+      top: 6rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Página de serviço",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "O título e o texto vêm da própria página (Loja virtual > Páginas). Os campos abaixo se repetem em todas as páginas de serviço."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Texto de destaque", "default": "Assistência técnica em Curitiba" },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Frase de apoio",
+      "info": "Usada quando a página não tem um resumo próprio.",
+      "default": "Avaliação antes do orçamento. Você só autoriza o conserto depois de saber o que o aparelho tem."
+    },
+    { "type": "text", "id": "button_label", "label": "Texto do botão", "default": "Falar no WhatsApp" },
+    { "type": "header", "content": "Caixa lateral" },
+    { "type": "text", "id": "aside_title", "label": "Título", "default": "Orçamento sem compromisso" },
+    {
+      "type": "textarea",
+      "id": "aside_text",
+      "label": "Texto",
+      "default": "Chame no WhatsApp e diga o que houve com o aparelho. A gente te responde no mesmo dia."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust",
+      "name": "Item de confiança",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Destaque", "default": "Garantia de 90 dias" },
+        { "type": "text", "id": "label", "label": "Explicação", "default": "Para o serviço executado." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Página de serviço",
+      "blocks": [{ "type": "trust" }, { "type": "trust" }, { "type": "trust" }]
+    }
+  ]
+}
+{% endschema %}

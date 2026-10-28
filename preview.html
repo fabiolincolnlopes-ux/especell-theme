@@ -1,0 +1,3137 @@
+<!doctype html>
+<html lang="pt-BR" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prévia — Tema Especell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Mirrors snippets/css-variables.liquid using the schema defaults */
+:root {
+  --font-primary--family: 'Assistant', sans-serif;
+  --font-heading--family: 'Archivo Narrow', sans-serif;
+  --page-width: 90rem;
+  --page-margin: 20px;
+  --color-background: #F5F6F8;
+  --color-foreground: #14161A;
+  --color-ink: #0A0A0A;
+  --color-accent: #E2FF1A;
+  --style-border-radius-inputs: 0px;
+}
+.preview-banner {
+  background: #111;
+  color: #E2FF1A;
+  text-align: center;
+  padding: .55rem;
+  font-family: 'Archivo Narrow', sans-serif;
+  font-size: .74rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+/* Sections are full-width here; in Shopify the .shopify-section grid handles it */
+.hero, .brands, .cta, .site-footer, .how, .stores, .faq { width: 100%; }
+/** Critical CSS for the theme. This file is included on every page. */
+
+/* ==========================================================================
+   Reset (inspired by https://www.joshwcomeau.com/css/custom-css-reset/)
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100svh;
+}
+
+html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  border-radius: var(--style-border-radius-inputs);
+}
+
+select {
+  background-color: var(--color-background);
+  color: currentcolor;
+}
+
+dialog {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+p {
+  text-wrap: pretty;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p:empty {
+  display: none;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):first-child,
+:empty:first-child + :where(p, h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):last-child,
+:where(p, h1, h2, h3, h4, h5, h6) + :has(+ :empty:last-child) {
+  margin-block-end: 0;
+}
+
+/* ==========================================================================
+   Base typography
+   ========================================================================== */
+body {
+  font-family: var(--font-primary--family);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  line-height: 1.03;
+}
+
+a {
+  color: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ==========================================================================
+   Shared building blocks
+   ========================================================================== */
+
+/** Eyebrow: small solid accent label above headings */
+.eyebrow {
+  display: inline-block;
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+  padding: 0.4rem 0.8rem;
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.eyebrow--outline {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+/** Buttons: sharp corners, solid fills, no soft gradients */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1rem 1.85rem;
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease,
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+}
+
+/** Wipe fill that sweeps in on hover */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translateY(101%);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: translateY(0);
+}
+
+.btn--accent {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+.btn--accent::before {
+  background-color: var(--color-ink);
+}
+.btn--accent:hover,
+.btn--accent:focus-visible {
+  color: var(--color-accent);
+}
+
+.btn--dark {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+.btn--dark::before {
+  background-color: var(--color-accent);
+}
+.btn--dark:hover,
+.btn--dark:focus-visible {
+  color: var(--color-ink);
+}
+
+.btn--outline {
+  background-color: transparent;
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+  color: inherit;
+}
+.btn--outline::before {
+  background-color: var(--color-accent);
+}
+.btn--outline:hover,
+.btn--outline:focus-visible {
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+
+.btn--sm {
+  padding: 0.7rem 1.2rem;
+  font-size: 0.78rem;
+}
+
+/** Cards */
+.card {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 9%, transparent);
+  border-radius: 0;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease,
+    box-shadow 0.4s ease;
+}
+
+/** Accent rule that grows across the top edge on hover */
+.card--interactive::after {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card--interactive:hover,
+.card--interactive:focus-within {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  box-shadow: 0 18px 40px -24px rgb(0 0 0 / 45%);
+}
+
+.card--interactive:hover::after,
+.card--interactive:focus-within::after {
+  transform: scaleX(1);
+}
+
+/** Card sitting on a dark section: inverted, so photos read like a gallery */
+.card--dark {
+  background-color: color-mix(in srgb, #fff 5%, var(--color-ink));
+  border-color: color-mix(in srgb, #fff 12%, transparent);
+  color: #fff;
+}
+
+.card--dark.card--interactive:hover,
+.card--dark.card--interactive:focus-within {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  box-shadow: 0 22px 48px -26px rgb(0 0 0 / 85%);
+}
+
+/** Surfaces */
+.bg-ink {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+/* Stepped down enough to read as a distinct band next to a plain-background
+   section, not as an accidental shade of the same thing. */
+.bg-muted {
+  background-color: color-mix(in srgb, var(--color-ink) 9%, var(--color-background));
+}
+
+/** Section shell shared by every custom section */
+.section {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.section__inner {
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+.section__intro {
+  max-width: 40rem;
+}
+
+.section__intro--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section__title {
+  margin-top: 1.1rem;
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+}
+
+.section__description {
+  margin-top: 1.1rem;
+  color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  font-size: 1.02rem;
+}
+
+.bg-ink .section__description {
+  color: color-mix(in srgb, #fff 68%, transparent);
+}
+
+/** Icon tile used across sections */
+.icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  background-color: var(--color-ink);
+  color: var(--color-accent);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.icon-tile svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card--interactive:hover .icon-tile {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.card--interactive:hover .icon-tile svg {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+/** Media frame with zoom-on-hover */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card--interactive:hover .media-frame img,
+.media-frame:hover img {
+  transform: scale(1.06);
+}
+
+/** Placeholder shown where a merchant image has not been uploaded yet */
+/** Inside a framed slot the placeholder should fill it, not set its own ratio */
+.media-frame > .media-placeholder {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+.media-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--color-ink) 6%, transparent) 0 12px,
+    transparent 12px 24px
+  );
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  font-family: var(--font-heading--family);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 1rem;
+}
+
+/** Inline text link with sliding underline */
+.link-underline {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.87rem;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ==========================================================================
+   Reading progress bar
+   Sits above every other fixed layer. Animated with scaleX rather than width
+   so it stays on the compositor and never triggers layout.
+   ========================================================================== */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 70;
+  pointer-events: none;
+}
+
+.reading-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 70%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   Floating action stack (bottom-right)
+   ========================================================================== */
+.floating-actions {
+  position: fixed;
+  right: 1.15rem;
+  bottom: 1.15rem;
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.floating-actions__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+}
+
+.floating-actions__btn svg {
+  position: relative;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.floating-actions__btn:hover {
+  transform: translateY(-3px) scale(1.06);
+}
+
+.floating-actions__btn--wa {
+  background-color: #25d366;
+  color: #fff;
+  box-shadow: 0 10px 26px -10px rgb(37 211 102 / 65%);
+}
+.floating-actions__btn--wa:hover {
+  background-color: #1fb457;
+}
+
+/** Halo that keeps pulsing so the bubble stays noticeable without blinking */
+.floating-actions__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: #25d366;
+  opacity: 0.55;
+  animation: fa-pulse 2.6s ease-out infinite;
+}
+
+@keyframes fa-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.floating-actions__btn--top {
+  background-color: var(--color-ink);
+  color: #fff;
+  box-shadow: 0 10px 26px -12px rgb(0 0 0 / 70%);
+  width: 2.9rem;
+  height: 2.9rem;
+}
+.floating-actions__btn--top svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.floating-actions__btn--top:hover {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+.floating-actions__btn--top[hidden] {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  /* The fixed bottom bar owns the WhatsApp action on phones */
+  .floating-actions__btn--wa {
+    display: none;
+  }
+  .floating-actions {
+    bottom: 4.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-actions__pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Animated backdrop for dark sections
+
+   Keeps flat black from looking dead. Everything animates on transform or
+   opacity only, so it stays on the compositor and costs almost nothing.
+   ========================================================================== */
+.fx-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/** Technical grid that drifts diagonally, forever */
+.fx-grid {
+  position: absolute;
+  /* Oversized so the drift never exposes an edge */
+  inset: -10%;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, #fff 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, #fff 5%, transparent) 1px, transparent 1px);
+  background-size: 68px 68px;
+  animation: fx-grid-drift 26s linear infinite;
+}
+
+/** Light-section variant: same drifting grid, drawn in ink instead of white */
+.fx-grid--light {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-ink) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 6%, transparent) 1px, transparent 1px);
+}
+
+.fx-glow--accent-soft {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-accent) 30%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+/** Accent glow that slowly breathes and wanders */
+.fx-glow {
+  position: absolute;
+  top: -35%;
+  right: -10%;
+  width: min(46rem, 90%);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-accent) 15%, transparent) 0%,
+    transparent 62%
+  );
+  animation: fx-glow-breathe 14s ease-in-out infinite alternate;
+}
+
+.fx-glow--left {
+  top: auto;
+  bottom: -40%;
+  right: auto;
+  left: -12%;
+  width: min(34rem, 80%);
+  animation-duration: 19s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes fx-grid-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Exactly one grid cell, so the loop is invisible */
+    transform: translate3d(68px, 68px, 0);
+  }
+}
+
+@keyframes fx-glow-breathe {
+  from {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: translate3d(6%, 4%, 0) scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Motion primitives (driven by assets/theme.js)
+   ========================================================================== */
+
+/** Reveal on scroll.
+    Scoped to `.js` so that if the script never runs — disabled JS, a script
+    error, a crawler that does not execute JS — the content simply shows
+    instead of staying invisible. Never hide content behind JS alone. */
+.js [data-animate] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-animate].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/** Parallax layer */
+[data-parallax] {
+  will-change: transform;
+}
+
+/** Card tilt: JS writes an inline transform on every pointer move, so the
+    transition has to stay short or the card lags behind the cursor. */
+[data-tilt] {
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out, border-color 0.3s ease, box-shadow 0.4s ease;
+}
+
+/** Magnetic button: JS sets --magnet-x / --magnet-y */
+[data-magnetic] {
+  transform: translate3d(var(--magnet-x, 0), var(--magnet-y, 0), 0);
+}
+
+/** Honour users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-animate] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Section layout utilities (from the Skeleton base)
+   ========================================================================== */
+
+/**
+ * Grid that enables both full-width and constrained layouts depending on the
+ * class of the child elements.
+ */
+.shopify-section {
+  --content-width: min(
+    calc(var(--page-width) - var(--page-margin) * 2),
+    calc(100% - var(--page-margin) * 2)
+  );
+  --content-margin: minmax(var(--page-margin), 1fr);
+  --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
+
+  position: relative;
+  grid-template-columns: var(--content-grid);
+  display: grid;
+  width: 100%;
+}
+
+.shopify-section > * {
+  grid-column: 2;
+}
+
+.shopify-section > .full-width {
+  grid-column: 1 / -1;
+}
+
+
+  .topbar {
+    /* A shade below the header so the two black bands stay distinguishable */
+    background-color: #000;
+    color: color-mix(in srgb, #fff 70%, transparent);
+    font-size: 0.78rem;
+    border-bottom: 1px solid color-mix(in srgb, #fff 8%, transparent);
+  }
+  .topbar__inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: 0.55rem var(--page-margin);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .topbar__note {
+    display: none;
+  }
+  .topbar__contacts {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-inline: auto;
+  }
+  .topbar__contacts a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+  .topbar__contacts a:hover {
+    color: var(--color-accent);
+  }
+  .topbar__contacts svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    color: var(--color-accent);
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: color-mix(in srgb, var(--color-ink) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid color-mix(in srgb, #fff 10%, transparent);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .site-header.is-scrolled {
+    box-shadow: 0 12px 34px -20px rgb(0 0 0 / 80%);
+    border-bottom-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  }
+  .site-header__inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
+    height: 4.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .site-header__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .site-header__logo img {
+    max-height: 2.6rem;
+    width: auto;
+  }
+  .site-header__logo-text {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.45rem;
+    letter-spacing: 0.04em;
+  }
+
+  .site-header__nav {
+    display: none;
+    align-items: center;
+    gap: 2.2rem;
+    flex: 1;
+    justify-content: center;
+  }
+  .site-header__nav-link {
+    position: relative;
+    text-decoration: none;
+    color: color-mix(in srgb, #fff 88%, transparent);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding-block: 0.35rem;
+    transition: color 0.2s ease;
+  }
+  .site-header__nav-link:hover {
+    color: #fff;
+  }
+  .site-header__nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .site-header__nav-link:hover::after,
+  .site-header__nav-link:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .site-header__cta {
+    display: none;
+    flex-shrink: 0;
+  }
+  .site-header__toggle {
+    display: flex;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: #fff;
+  }
+  .site-header__toggle svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .site-header__mobile {
+    display: none;
+    border-top: 1px solid color-mix(in srgb, #fff 10%, transparent);
+    background-color: var(--color-ink);
+  }
+  .site-header__mobile[data-open] {
+    display: block;
+  }
+  .site-header__mobile nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.35rem var(--page-margin);
+  }
+  .site-header__mobile a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+  }
+  .site-header__mobile .btn {
+    color: var(--color-ink);
+  }
+  .site-header__mobile nav > .btn {
+    align-self: flex-start;
+  }
+
+  @media (min-width: 48rem) {
+    .topbar__note {
+      display: inline;
+    }
+    .topbar__contacts {
+      margin-inline: 0;
+    }
+    .site-header__nav,
+    .site-header__cta {
+      display: flex;
+    }
+    .site-header__toggle {
+      display: none;
+    }
+  }
+
+
+  .hero {
+    position: relative;
+  }
+
+  .hero__stage {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Diagonal accent wash on the right side */
+  .hero__slash {
+    position: absolute;
+    top: -10%;
+    right: -12%;
+    height: 120%;
+    width: 46%;
+    background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    transform: skewX(-11deg);
+  }
+  .hero__edge {
+    position: absolute;
+    top: -10%;
+    right: 18%;
+    height: 120%;
+    width: 3px;
+    background-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    transform: skewX(-11deg);
+  }
+
+  .hero__inner {
+    position: relative;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(3.5rem, 7vw, 6rem) var(--page-margin) clamp(2.5rem, 5vw, 4rem);
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .hero__title {
+    max-width: 20ch;
+    font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+    margin-top: 1.4rem;
+  }
+  .hero__description {
+    max-width: 46ch;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: color-mix(in srgb, #fff 72%, transparent);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.4rem;
+  }
+  .hero__actions .btn--outline {
+    color: #fff;
+  }
+
+  .hero__trust {
+    list-style: none;
+    margin: 1.6rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+  }
+  .hero__trust li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+    color: color-mix(in srgb, #fff 82%, transparent);
+  }
+  .hero__trust svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  .hero__media-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border: 2px solid color-mix(in srgb, #fff 14%, transparent);
+  }
+  .hero__media-inner {
+    height: 100%;
+  }
+  .hero__media-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .media-placeholder--dark {
+    aspect-ratio: auto;
+    height: 100%;
+    background: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, #fff 7%, transparent) 0 12px,
+      transparent 12px 24px
+    );
+    color: color-mix(in srgb, #fff 50%, transparent);
+  }
+
+  /* Stat strip: solid band under the stage, lifted slightly off pure black */
+  .hero__stats {
+    position: relative;
+    background-color: color-mix(in srgb, #fff 4%, var(--color-ink));
+    border-top: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+  .hero__stats-inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(1.75rem, 3vw, 2.75rem) var(--page-margin);
+    display: grid;
+    /* auto-fit so the strip adapts if a stat is added or removed later.
+       No `fr` sibling here — that combination is invalid and gets dropped. */
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 1.5rem 1.25rem;
+  }
+
+  .hero__stat {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+  /* Divider that draws downward as the strip reveals */
+  .hero__stat::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 0;
+    background-color: color-mix(in srgb, #fff 18%, transparent);
+    transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s;
+  }
+  .hero__stat.is-visible::before {
+    height: 100%;
+  }
+  .hero__stat:first-child {
+    padding-left: 0;
+  }
+  .hero__stat:first-child::before {
+    display: none;
+  }
+
+  .hero__stat-kicker {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: color-mix(in srgb, var(--color-accent) 80%, transparent);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero__stat-value {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 5.5vw, 3.4rem);
+    line-height: 1;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+    transition: text-shadow 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Headline stat: bigger, and underlined by a bar that grows in */
+  .hero__stat--featured .hero__stat-value {
+    font-size: clamp(2.6rem, 8vw, 4.6rem);
+  }
+  .hero__stat--featured .hero__stat-label {
+    color: color-mix(in srgb, #fff 85%, transparent);
+    font-weight: 600;
+  }
+
+  .hero__stat-rule {
+    display: block;
+    height: 3px;
+    width: 0;
+    margin-top: 0.7rem;
+    background-color: var(--color-accent);
+    transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s;
+  }
+  .hero__stat.is-visible .hero__stat-rule {
+    width: 2rem;
+  }
+  .hero__stat--featured.is-visible .hero__stat-rule {
+    width: 4.5rem;
+  }
+
+  .hero__stat-label {
+    margin-top: 0.55rem;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: color-mix(in srgb, #fff 62%, transparent);
+    transition: color 0.3s ease;
+  }
+
+  .hero__stat:hover .hero__stat-value {
+    transform: translateY(-2px);
+    text-shadow: 0 0 26px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  }
+  .hero__stat:hover .hero__stat-label {
+    color: #fff;
+  }
+
+  @media (min-width: 64rem) {
+    .hero__inner {
+      grid-template-columns: 1.05fr 0.95fr;
+      padding-block: clamp(4.5rem, 7vw, 7rem) clamp(3rem, 5vw, 4.5rem);
+    }
+    .hero__stat-label {
+      font-size: 0.82rem;
+    }
+  }
+
+
+  .brands {
+    background-color: var(--color-ink);
+    color: #fff;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    overflow: hidden;
+  }
+  .brands__inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+  }
+  .brands__heading {
+    padding-inline: var(--page-margin);
+    text-align: center;
+    font-family: var(--font-heading--family);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: color-mix(in srgb, #fff 55%, transparent);
+  }
+  .brands__viewport {
+    margin-top: 1.5rem;
+    position: relative;
+    /* Fade the edges so brands drift in and out instead of popping */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .brands__track {
+    display: flex;
+    width: max-content;
+    animation: brands-scroll var(--marquee-duration, 32s) linear infinite;
+  }
+  .brands__viewport:hover .brands__track {
+    animation-play-state: paused;
+  }
+  .brands__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    list-style: none;
+    margin: 0;
+    padding: 0 clamp(1.25rem, 2.5vw, 2.25rem);
+  }
+  .brands__item {
+    flex-shrink: 0;
+  }
+  .brands__name {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, #fff 45%, transparent);
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+  .brands__item:hover .brands__name {
+    color: var(--color-accent);
+  }
+  .brands__logo {
+    height: 2rem;
+    width: auto;
+    filter: grayscale(1) brightness(2);
+    opacity: 0.6;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  .brands__item:hover .brands__logo {
+    opacity: 1;
+    filter: none;
+  }
+
+  @keyframes brands-scroll {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      /* Exactly one copy of the list = a seamless restart */
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brands__track {
+      animation: none;
+    }
+    .brands__viewport {
+      overflow-x: auto;
+    }
+  }
+
+
+  .services {
+    background-color: var(--color-background);
+  }
+  .services__grid {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .services__card {
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+  .services__card-title {
+    margin-top: 1.35rem;
+    font-size: 1.2rem;
+  }
+  .services__card-text {
+    margin-top: 0.65rem;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+  .services__card-note {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+    font-family: var(--font-heading--family);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+  .services__footnote {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.88rem;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+
+  @media (min-width: 40rem) {
+    .services__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .services__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+
+  .how {
+    position: relative;
+    overflow: hidden;
+  }
+  .how .section__inner {
+    position: relative;
+  }
+
+  .how__wrap {
+    position: relative;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  /* The connecting track sits on the same line as the step dots */
+  .how__track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: color-mix(in srgb, #fff 12%, transparent);
+    overflow: hidden;
+    display: none;
+  }
+  .how__track-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      color-mix(in srgb, var(--color-accent) 40%, transparent)
+    );
+    transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+  }
+  .how__track.is-visible .how__track-fill {
+    width: 100%;
+  }
+
+  .how__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    counter-reset: step;
+  }
+
+  .how__step {
+    position: relative;
+    padding-top: 1.9rem;
+    border-top: 2px solid color-mix(in srgb, #fff 14%, transparent);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__step::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+    transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__step.is-visible::before {
+    width: 100%;
+  }
+  .how__step:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Oversized translucent numeral behind the content */
+  .how__ghost {
+    position: absolute;
+    top: 0.6rem;
+    right: 0;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 7rem;
+    line-height: 1;
+    color: color-mix(in srgb, #fff 5%, transparent);
+    pointer-events: none;
+    user-select: none;
+    transition: color 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__step:hover .how__ghost {
+    color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    transform: translateY(-4px);
+  }
+
+  /* Marker that sits on the track */
+  .how__dot {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-ink);
+    border: 2px solid color-mix(in srgb, #fff 25%, transparent);
+    border-radius: 50%;
+    transition: border-color 0.4s ease, background-color 0.4s ease, transform 0.4s ease;
+    display: none;
+  }
+  .how__step.is-visible .how__dot {
+    border-color: var(--color-accent);
+  }
+  .how__step:hover .how__dot {
+    background-color: var(--color-accent);
+    transform: scale(1.25);
+  }
+
+  .how__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    background-color: color-mix(in srgb, #fff 8%, transparent);
+    color: var(--color-accent);
+    transition: background-color 0.35s ease, color 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__icon svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+  .how__step:hover .how__icon {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  .how__step-number {
+    display: block;
+    margin-top: 1.1rem;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .how__step-title {
+    margin-top: 0.4rem;
+    font-size: 1.2rem;
+  }
+  .how__step-text {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, #fff 66%, transparent);
+    max-width: 34ch;
+  }
+
+  @media (min-width: 48rem) {
+    .how__wrap {
+      padding-top: 2.5rem;
+    }
+    .how__track,
+    .how__dot {
+      display: block;
+    }
+    .how__steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .how__step {
+      border-top: none;
+      padding-top: 2.25rem;
+    }
+    .how__step::before {
+      display: none;
+    }
+  }
+
+
+  .about {
+    background-color: var(--color-background);
+  }
+  .about__inner {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .about__media {
+    position: relative;
+  }
+  .about__frame {
+    aspect-ratio: 4 / 3;
+  }
+  .about__badge {
+    position: absolute;
+    right: -0.5rem;
+    bottom: -1.25rem;
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+    padding: 1rem 1.35rem;
+    text-align: center;
+    box-shadow: 0 14px 34px -20px rgb(0 0 0 / 60%);
+  }
+  .about__badge-value {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 2.1rem;
+    line-height: 1;
+  }
+  .about__badge-label {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .about__body {
+    margin-top: 1.35rem;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: color-mix(in srgb, var(--color-ink) 66%, transparent);
+  }
+  .about__body p + p {
+    margin-top: 0.9rem;
+  }
+
+  .about__points {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .about__point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    font-size: 0.95rem;
+  }
+  .about__point strong {
+    display: block;
+    font-family: var(--font-heading--family);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 0.95rem;
+  }
+  .about__point-text {
+    display: block;
+    margin-top: 0.2rem;
+    color: color-mix(in srgb, var(--color-ink) 60%, transparent);
+  }
+  .about__point-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    background-color: var(--color-ink);
+    color: var(--color-accent);
+  }
+  .about__point-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .about__cta {
+    margin-top: 2.25rem;
+  }
+
+  @media (min-width: 64rem) {
+    .about__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+
+  .stores {
+    position: relative;
+    overflow: hidden;
+  }
+  .stores .section__inner {
+    position: relative;
+  }
+  .stores__grid {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .stores__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .stores__media {
+    aspect-ratio: 4 / 3;
+    position: relative;
+  }
+  .stores__tags {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    right: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .stores__tag {
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .stores__tag--city {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+  /* Secondary tag: readable over a photo without competing with the city */
+  .stores__tag--venue {
+    background-color: color-mix(in srgb, var(--color-ink) 82%, transparent);
+    color: #fff;
+    border: 1px solid color-mix(in srgb, #fff 30%, transparent);
+    backdrop-filter: blur(4px);
+  }
+  .stores__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.5rem;
+  }
+  .stores__name {
+    font-size: 1.25rem;
+  }
+  .stores__address,
+  .stores__hours,
+  .stores__phone {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: color-mix(in srgb, #fff 62%, transparent);
+    text-decoration: none;
+  }
+  .stores__phone {
+    font-weight: 700;
+    color: #fff;
+    transition: color 0.2s ease;
+  }
+  .stores__phone:hover {
+    color: var(--color-accent);
+  }
+  .stores__meta-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    margin-top: 0.1rem;
+  }
+  .stores__meta-icon svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-accent);
+  }
+  .stores__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+  .stores__map-btn {
+    color: #fff;
+  }
+  /* Striped placeholder needs to invert on the dark card */
+  .stores__card .media-placeholder {
+    background: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, #fff 7%, transparent) 0 12px,
+      transparent 12px 24px
+    );
+    color: color-mix(in srgb, #fff 45%, transparent);
+  }
+
+  @media (min-width: 40rem) {
+    .stores__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .stores__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+
+  .testimonials {
+    background-color: var(--color-background);
+  }
+  .testimonials__grid {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .testimonials__card {
+    position: relative;
+    margin: 0;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    display: flex;
+    flex-direction: column;
+  }
+  .testimonials__flag {
+    display: inline-block;
+    align-self: flex-start;
+    margin-bottom: 1rem;
+    padding: 0.28rem 0.55rem;
+    background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--color-ink) 30%, transparent);
+    font-family: var(--font-heading--family);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+  .testimonials__quote {
+    font-family: var(--font-heading--family);
+    font-size: 3.5rem;
+    line-height: 0.6;
+    color: var(--color-accent);
+    /* Yellow on white needs a dark edge to stay visible */
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-ink) 22%, transparent);
+  }
+  .testimonials__text {
+    margin: 1rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  }
+  .testimonials__author {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  }
+  .testimonials__name {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.92rem;
+  }
+  .testimonials__source {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    color: color-mix(in srgb, var(--color-ink) 52%, transparent);
+  }
+
+  @media (min-width: 40rem) {
+    .testimonials__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .testimonials__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+
+  .faq {
+    position: relative;
+    overflow: hidden;
+  }
+  .faq .section__inner {
+    position: relative;
+  }
+  .faq__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .faq__cta {
+    margin-top: 1.75rem;
+  }
+
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+  }
+  .faq__item {
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  }
+  .faq__item:last-child {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  }
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.15rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    transition: color 0.25s ease;
+  }
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+  .faq__question:hover {
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+
+  /* Plus sign that rotates into a minus when the answer opens */
+  .faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--color-accent);
+  }
+  .faq__icon::before,
+  .faq__icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: var(--color-ink);
+    transform: translate(-50%, -50%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+  }
+  .faq__icon::before {
+    width: 0.7rem;
+    height: 2px;
+  }
+  .faq__icon::after {
+    width: 2px;
+    height: 0.7rem;
+  }
+  .faq__item[open] .faq__icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  .faq__answer {
+    padding-bottom: 1.3rem;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--color-ink) 66%, transparent);
+    max-width: 62ch;
+  }
+  .faq__answer p + p {
+    margin-top: 0.75rem;
+  }
+  .faq__item[open] .faq__answer {
+    animation: faq-reveal 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @keyframes faq-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .faq__inner {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+  }
+
+
+  .cta {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3.5rem, 7vw, 6rem);
+    text-align: center;
+  }
+  .cta__glow {
+    position: absolute;
+    top: -60%;
+    left: 50%;
+    width: min(50rem, 100%);
+    aspect-ratio: 1;
+    margin-left: min(-25rem, -50%);
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-accent) 18%, transparent) 0%,
+      transparent 62%
+    );
+    animation: cta-glow-drift 16s ease-in-out infinite alternate;
+  }
+
+  @keyframes cta-glow-drift {
+    from {
+      transform: translate3d(-6%, 0, 0) scale(1);
+      opacity: 0.6;
+    }
+    to {
+      transform: translate3d(6%, 4%, 0) scale(1.18);
+      opacity: 1;
+    }
+  }
+  .cta__inner {
+    position: relative;
+    max-width: 42rem;
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
+  }
+  .cta__title {
+    margin-top: 1.25rem;
+    font-size: clamp(1.9rem, 4.5vw, 3.1rem);
+  }
+  .cta__description {
+    margin-top: 1.1rem;
+    color: color-mix(in srgb, #fff 72%, transparent);
+  }
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2.25rem;
+  }
+  .cta__actions .btn--outline {
+    color: #fff;
+  }
+
+
+  .site-footer__inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: clamp(3rem, 6vw, 4.5rem) var(--page-margin) 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .site-footer__logo {
+    max-height: 3rem;
+    width: auto;
+  }
+  .site-footer__name {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .site-footer__tagline {
+    margin-top: 0.85rem;
+    max-width: 30ch;
+    color: color-mix(in srgb, #fff 62%, transparent);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .site-footer__social {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+  .site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid color-mix(in srgb, #fff 20%, transparent);
+    color: #fff;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .site-footer__social a:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-ink);
+    transform: translateY(-3px);
+  }
+  .site-footer__social svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .site-footer__column-title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+  }
+  .site-footer__menu {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .site-footer__menu a {
+    color: color-mix(in srgb, #fff 72%, transparent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+  .site-footer__menu a:hover {
+    color: var(--color-accent);
+  }
+  .site-footer__text {
+    margin-top: 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, #fff 62%, transparent);
+  }
+
+  .site-footer__bottom {
+    border-top: 1px solid color-mix(in srgb, #fff 10%, transparent);
+    padding: 1.35rem var(--page-margin);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.5rem;
+    text-align: center;
+    font-size: 0.76rem;
+    color: color-mix(in srgb, #fff 45%, transparent);
+  }
+
+  @media (min-width: 48rem) {
+    /* auto-fit cannot share a track list with an `fr` column, so the brand
+       block widens by spanning two slots instead. */
+    .site-footer__inner {
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    }
+    .site-footer__brand {
+      grid-column: span 2;
+      max-width: 28rem;
+    }
+  }
+
+
+    .mobile-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      display: none;
+      border-top: 1px solid color-mix(in srgb, #fff 12%, transparent);
+      background-color: var(--color-ink);
+    }
+    .mobile-bar__btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.95rem 0.5rem;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-heading--family);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .mobile-bar__btn svg {
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+    .mobile-bar__btn--accent {
+      background-color: var(--color-accent);
+      color: var(--color-ink);
+    }
+
+    @media (max-width: 47.99rem) {
+      .mobile-bar {
+        display: flex;
+      }
+      /* Keep the footer clear of the fixed bar */
+      body {
+        padding-bottom: 3.5rem;
+      }
+    }
+  
+</style>
+</head>
+<body>
+
+<div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+
+<div class="preview-banner">Prévia do tema Especell — gerada a partir do CSS e do JS reais do tema</div>
+
+<div class="topbar">
+  <div class="topbar__inner">
+    <span class="topbar__note">Assistência técnica especializada · 5 lojas em Curitiba e região</span>
+    <span class="topbar__contacts">
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> (41) 99903-1636</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> WhatsApp</a>
+    </span>
+  </div>
+</div>
+
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a href="#" class="site-header__logo"><span class="site-header__logo-text">Especell</span></a>
+    <nav class="site-header__nav">
+      <a href="#servicos" class="site-header__nav-link">Serviços</a>
+      <a href="#como-funciona" class="site-header__nav-link">Como funciona</a>
+      <a href="#lojas" class="site-header__nav-link">Lojas</a>
+      <a href="#faq" class="site-header__nav-link">Dúvidas</a>
+    </nav>
+    <a href="#" class="btn btn--accent btn--sm site-header__cta">Agendar agora</a>
+    <button type="button" class="site-header__toggle" data-menu-toggle aria-expanded="false" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+</svg></button>
+  </div>
+  <div class="site-header__mobile" data-mobile-menu>
+    <nav>
+      <a href="#servicos">Serviços</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#lojas">Lojas</a>
+      <a href="#faq">Dúvidas</a>
+      <a href="#" class="btn btn--accent">Agendar agora</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero bg-ink">
+  <div class="hero__stage">
+    <div class="fx-bg" aria-hidden="true">
+      <div class="fx-grid"></div>
+      <div class="fx-glow"></div>
+      <div class="hero__slash"></div>
+      <div class="hero__edge"></div>
+    </div>
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <span class="eyebrow" data-animate>Especialistas em consertos desde 2010</span>
+        <h1 class="hero__title" data-animate>Seu aparelho nas mãos de quem entende</h1>
+        <p class="hero__description" data-animate>Assistência técnica em celular, notebook, PC e console. Cinco lojas físicas em Curitiba e região metropolitana, com atendimento presencial e avaliação antes do orçamento.</p>
+        <div class="hero__actions" data-animate>
+          <a href="#" class="btn btn--accent" data-magnetic>Fazer orçamento <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+          <a href="#servicos" class="btn btn--outline">Ver serviços</a>
+        </div>
+        <ul class="hero__trust" data-animate>
+          <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.5 12.5l5 5 10-11" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg><span>Avaliação gratuita</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.5 12.5l5 5 10-11" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg><span>Todas as lojas dentro do Jacomar</span></li>
+        </ul>
+      </div>
+      <div class="hero__media" data-animate>
+        <div class="hero__media-frame hero__media-frame--empty">
+          <div class="media-placeholder media-placeholder--dark">Envie aqui a foto de destaque</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero__stats">
+    <div class="hero__stats-inner">
+      <div class="hero__stat hero__stat--featured" data-animate>
+        <span class="hero__stat-kicker">Mais de</span>
+        <p class="hero__stat-value"><span data-counter="15">15</span></p>
+        <span class="hero__stat-rule" aria-hidden="true"></span>
+        <p class="hero__stat-label">Anos no mercado</p>
+      </div><div class="hero__stat" data-animate>
+        <span class="hero__stat-kicker">São</span>
+        <p class="hero__stat-value"><span data-counter="5">5</span></p>
+        <span class="hero__stat-rule" aria-hidden="true"></span>
+        <p class="hero__stat-label">Lojas físicas</p>
+      </div><div class="hero__stat" data-animate>
+        <span class="hero__stat-kicker">Em menos de</span>
+        <p class="hero__stat-value"><span data-counter="24">24</span>h</p>
+        <span class="hero__stat-rule" aria-hidden="true"></span>
+        <p class="hero__stat-label">A maioria dos consertos</p>
+      </div><div class="hero__stat" data-animate>
+        <span class="hero__stat-kicker">São</span>
+        <p class="hero__stat-value"><span data-counter="90">90</span></p>
+        <span class="hero__stat-rule" aria-hidden="true"></span>
+        <p class="hero__stat-label">Dias de garantia no reparo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="brands">
+  <div class="brands__inner">
+    <p class="brands__heading" data-animate>Consertamos todas as marcas</p>
+    <div class="brands__viewport">
+      <div class="brands__track" style="--marquee-duration: 35s">
+        
+  <ul class="brands__list">
+    <li class="brands__item"><span class="brands__name">Apple</span></li><li class="brands__item"><span class="brands__name">Samsung</span></li><li class="brands__item"><span class="brands__name">Motorola</span></li><li class="brands__item"><span class="brands__name">Xiaomi</span></li><li class="brands__item"><span class="brands__name">LG</span></li><li class="brands__item"><span class="brands__name">Sony</span></li><li class="brands__item"><span class="brands__name">Asus</span></li><li class="brands__item"><span class="brands__name">Microsoft</span></li>
+  </ul>
+  <ul class="brands__list" aria-hidden="true">
+    <li class="brands__item"><span class="brands__name">Apple</span></li><li class="brands__item"><span class="brands__name">Samsung</span></li><li class="brands__item"><span class="brands__name">Motorola</span></li><li class="brands__item"><span class="brands__name">Xiaomi</span></li><li class="brands__item"><span class="brands__name">LG</span></li><li class="brands__item"><span class="brands__name">Sony</span></li><li class="brands__item"><span class="brands__name">Asus</span></li><li class="brands__item"><span class="brands__name">Microsoft</span></li>
+  </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services section" id="servicos">
+  <div class="section__inner">
+    <div class="section__intro section__intro--center" data-animate>
+      <span class="eyebrow">O que fazemos</span>
+      <h2 class="section__title">Nossos serviços</h2>
+      <p class="section__description">Consertos e acessórios para celular, notebook, PC e console — com avaliação feita antes de qualquer orçamento.</p>
+    </div>
+    <div class="services__grid">
+      <article class="services__card card card--interactive" data-animate data-tilt>
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 5.3 20l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.1-2.1 2.7-2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span>
+        <h3 class="services__card-title">Conserto de celular</h3>
+        <p class="services__card-text">Troca de tela, bateria, conectores e reparo de placa — em aparelhos de todas as marcas.</p>
+      </article><article class="services__card card card--interactive" data-animate data-tilt>
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="5" width="16" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M2.5 18.5h19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg></span>
+        <h3 class="services__card-title">Notebook e PC</h3>
+        <p class="services__card-text">Manutenção, limpeza, upgrade e reparo de notebooks e computadores.</p>
+      </article><article class="services__card card card--interactive" data-animate data-tilt>
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.5 7.5h9a4.5 4.5 0 0 1 4.4 5.4l-.7 3.4a2.2 2.2 0 0 1-3.9.9L15 15H9l-1.3 2.2a2.2 2.2 0 0 1-3.9-.9l-.7-3.4A4.5 4.5 0 0 1 7.5 7.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M8 10.5v2M7 11.5h2M15.5 11h.01M17.5 12.5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg></span>
+        <h3 class="services__card-title">Consoles</h3>
+        <p class="services__card-text">Manutenção e reparo de videogames e controles.</p>
+      </article><article class="services__card card card--interactive" data-animate data-tilt>
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 3l7 3v5.5c0 5-3 8.4-7 9.5-4-1.1-7-4.5-7-9.5V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+        <h3 class="services__card-title">Película e capinha</h3>
+        <p class="services__card-text">Instalação de película na hora e capinhas para os principais modelos.</p>
+      </article><article class="services__card card card--interactive" data-animate data-tilt>
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 5.3 20l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.1-2.1 2.7-2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span>
+        <h3 class="services__card-title">Informática em geral</h3>
+        <p class="services__card-text">Acessórios, periféricos e serviços de informática no balcão.</p>
+      </article><article class="services__card card card--interactive" data-animate data-tilt>
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+        <h3 class="services__card-title">Avaliação antes do orçamento</h3>
+        <p class="services__card-text">O aparelho é avaliado primeiro, e só depois passamos o orçamento para você decidir.</p>
+      </article>
+    </div>
+    <p class="services__footnote" data-animate>Valores sob avaliação. Preencha aqui a observação que você quiser sobre preços e condições.</p>
+  </div>
+</section>
+
+<section class="how bg-ink section" id="como-funciona">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="fx-glow fx-glow--left"></div>
+  </div>
+  <div class="section__inner">
+    <div class="section__intro" data-animate>
+      <span class="eyebrow">Passo a passo</span>
+      <h2 class="section__title">Como funciona</h2>
+      <p class="section__description">Um processo simples e sem surpresa: você só aprova o serviço depois de saber exatamente o que será feito.</p>
+    </div>
+    <div class="how__wrap">
+      <div class="how__track" aria-hidden="true" data-animate><span class="how__track-fill"></span></div>
+      <ol class="how__steps">
+        <li class="how__step" data-animate>
+          <span class="how__ghost" aria-hidden="true">01</span>
+          <span class="how__dot" aria-hidden="true"></span>
+          <span class="how__icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M15.2 15.2 20 20" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+</svg></span>
+          <span class="how__step-number">01</span>
+          <h3 class="how__step-title">Avaliação</h3>
+          <p class="how__step-text">Você leva o aparelho em uma das nossas lojas e nossa equipe identifica o problema.</p>
+        </li><li class="how__step" data-animate>
+          <span class="how__ghost" aria-hidden="true">02</span>
+          <span class="how__dot" aria-hidden="true"></span>
+          <span class="how__icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M13.5 3.5H7a1.5 1.5 0 0 0-1.5 1.5v14A1.5 1.5 0 0 0 7 20.5h10a1.5 1.5 0 0 0 1.5-1.5V8.5l-5-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M13.5 3.5v5h5M9 13h6M9 16.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          <span class="how__step-number">02</span>
+          <h3 class="how__step-title">Orçamento</h3>
+          <p class="how__step-text">Passamos o orçamento do serviço. Você decide se quer seguir, sem compromisso.</p>
+        </li><li class="how__step" data-animate>
+          <span class="how__ghost" aria-hidden="true">03</span>
+          <span class="how__dot" aria-hidden="true"></span>
+          <span class="how__icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 5.3 20l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.1-2.1 2.7-2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span>
+          <span class="how__step-number">03</span>
+          <h3 class="how__step-title">Conserto</h3>
+          <p class="how__step-text">Aprovado o orçamento, o reparo é executado pela nossa equipe técnica.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="about section" id="sobre">
+  <div class="section__inner about__inner">
+    <div class="about__media" data-animate>
+      <div class="media-frame about__frame">
+        <div class="media-placeholder">Envie aqui uma foto da equipe ou da loja</div>
+      </div>
+      <div class="about__badge">
+        <span class="about__badge-value">2010</span>
+        <span class="about__badge-label">Desde</span>
+      </div>
+    </div>
+    <div class="about__copy">
+      <div data-animate>
+        <span class="eyebrow">Quem somos</span>
+        <h2 class="section__title">Especialistas em consertos desde 2010</h2>
+      </div>
+      <div class="about__body" data-animate>
+        <p>A Especell é uma assistência técnica especializada em celular, notebook, PC e console, no mercado desde 2010.</p>
+        <p>Hoje somos cinco lojas físicas em Curitiba e região metropolitana, com atendimento presencial e equipe técnica própria.</p>
+      </div>
+      <ul class="about__points">
+        <li class="about__point" data-animate>
+          <span class="about__point-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 3l7 3v5.5c0 5-3 8.4-7 9.5-4-1.1-7-4.5-7-9.5V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          <span><strong>Todas as marcas</strong><span class="about__point-text">Atendemos aparelhos de todos os fabricantes.</span></span>
+        </li><li class="about__point" data-animate>
+          <span class="about__point-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 3l7 3v5.5c0 5-3 8.4-7 9.5-4-1.1-7-4.5-7-9.5V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          <span><strong>5 lojas físicas</strong><span class="about__point-text">Curitiba e região metropolitana.</span></span>
+        </li><li class="about__point" data-animate>
+          <span class="about__point-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 3l7 3v5.5c0 5-3 8.4-7 9.5-4-1.1-7-4.5-7-9.5V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          <span><strong>Atendimento presencial</strong><span class="about__point-text">Você fala com a equipe cara a cara, na loja.</span></span>
+        </li>
+      </ul>
+      <a href="#lojas" class="btn btn--dark about__cta" data-animate data-magnetic>Ver nossas lojas <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="stores section bg-ink" id="lojas">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="fx-glow"></div>
+  </div>
+  <div class="section__inner">
+    <div class="section__intro section__intro--center" data-animate>
+      <span class="eyebrow">Onde estamos</span>
+      <h2 class="section__title">Nossas lojas</h2>
+      <p class="section__description">Cinco unidades para atender você. Escolha a mais próxima e fale direto com a loja.</p>
+    </div>
+    <div class="stores__grid">
+      <article class="stores__card card card--dark card--interactive" data-animate>
+        <div class="stores__media media-frame">
+          <div class="media-placeholder">Envie aqui a foto da fachada</div>
+          <div class="stores__tags">
+            <span class="stores__tag stores__tag--city">Curitiba</span>
+            <span class="stores__tag stores__tag--venue">Dentro do Jacomar</span>
+          </div>
+        </div>
+        <div class="stores__body">
+          <h3 class="stores__name">Especell Maestro</h3>
+          <p class="stores__address"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+</svg></span><span>R. Maestro Carlos Frank, 2812 — Boqueirão, Curitiba/PR, 81750-400 (anexo ao Jacomar, loja 4)</span></p>
+          <a href="#" class="stores__phone"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span><span>(41) 99903-1636</span></a>
+          <div class="stores__actions">
+            <a href="#" class="btn btn--accent btn--sm"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> WhatsApp</a>
+            <a href="#" class="btn btn--outline btn--sm stores__map-btn">Como chegar</a>
+          </div>
+        </div>
+      </article><article class="stores__card card card--dark card--interactive" data-animate>
+        <div class="stores__media media-frame">
+          <div class="media-placeholder">Envie aqui a foto da fachada</div>
+          <div class="stores__tags">
+            <span class="stores__tag stores__tag--city">Curitiba</span>
+            <span class="stores__tag stores__tag--venue">Dentro do Jacomar</span>
+          </div>
+        </div>
+        <div class="stores__body">
+          <h3 class="stores__name">Especell Novo Mundo</h3>
+          <p class="stores__address"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+</svg></span><span>R. Pedro Gusso, 1089 — Novo Mundo, Curitiba/PR, 81050-200 (anexo ao Jacomar, loja 3)</span></p>
+          <a href="#" class="stores__phone"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span><span>(41) 99895-0941</span></a>
+          <div class="stores__actions">
+            <a href="#" class="btn btn--accent btn--sm"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> WhatsApp</a>
+            <a href="#" class="btn btn--outline btn--sm stores__map-btn">Como chegar</a>
+          </div>
+        </div>
+      </article><article class="stores__card card card--dark card--interactive" data-animate>
+        <div class="stores__media media-frame">
+          <div class="media-placeholder">Envie aqui a foto da fachada</div>
+          <div class="stores__tags">
+            <span class="stores__tag stores__tag--city">Curitiba</span>
+            <span class="stores__tag stores__tag--venue">Dentro do Jacomar</span>
+          </div>
+        </div>
+        <div class="stores__body">
+          <h3 class="stores__name">Especell BR277</h3>
+          <p class="stores__address"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+</svg></span><span>R. Eunice Bettini Bartoszeck, 1990 — Uberaba, Curitiba/PR (anexo ao Jacomar, loja 3)</span></p>
+          <a href="#" class="stores__phone"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span><span>(41) 99941-6986</span></a>
+          <div class="stores__actions">
+            <a href="#" class="btn btn--accent btn--sm"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> WhatsApp</a>
+            <a href="#" class="btn btn--outline btn--sm stores__map-btn">Como chegar</a>
+          </div>
+        </div>
+      </article><article class="stores__card card card--dark card--interactive" data-animate>
+        <div class="stores__media media-frame">
+          <div class="media-placeholder">Envie aqui a foto da fachada</div>
+          <div class="stores__tags">
+            <span class="stores__tag stores__tag--city">São José dos Pinhais</span>
+            <span class="stores__tag stores__tag--venue">Dentro do Jacomar</span>
+          </div>
+        </div>
+        <div class="stores__body">
+          <h3 class="stores__name">Especell Guatupê</h3>
+          <p class="stores__address"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+</svg></span><span>Av. Tomás Carmeliano de Miranda, 345 — Guatupê, São José dos Pinhais/PR, 83060-196 (anexo ao Jacomar, loja 3)</span></p>
+          <a href="#" class="stores__phone"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span><span>(41) 3385-1617</span></a>
+          <div class="stores__actions">
+            <a href="#" class="btn btn--accent btn--sm"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> WhatsApp</a>
+            <a href="#" class="btn btn--outline btn--sm stores__map-btn">Como chegar</a>
+          </div>
+        </div>
+      </article><article class="stores__card card card--dark card--interactive" data-animate>
+        <div class="stores__media media-frame">
+          <div class="media-placeholder">Envie aqui a foto da fachada</div>
+          <div class="stores__tags">
+            <span class="stores__tag stores__tag--city">São José dos Pinhais</span>
+            <span class="stores__tag stores__tag--venue">Dentro do Jacomar</span>
+          </div>
+        </div>
+        <div class="stores__body">
+          <h3 class="stores__name">Especell Costeira</h3>
+          <p class="stores__address"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+</svg></span><span>Alameda Arpo, 1929 — Costeira, São José dos Pinhais/PR, 83010-290 (anexo ao Jacomar, loja 3)</span></p>
+          <a href="#" class="stores__phone"><span class="stores__meta-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></span><span>(41) 3282-3242</span></a>
+          <div class="stores__actions">
+            <a href="#" class="btn btn--accent btn--sm"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> WhatsApp</a>
+            <a href="#" class="btn btn--outline btn--sm stores__map-btn">Como chegar</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials section">
+  <div class="section__inner">
+    <div class="section__intro section__intro--center" data-animate>
+      <span class="eyebrow">Depoimentos</span>
+      <h2 class="section__title">O que dizem nossos clientes</h2>
+      <p class="section__description">Os cards abaixo são exemplos. Substitua pelas avaliações reais que vocês já recebem no Google e no Instagram.</p>
+    </div>
+    <div class="testimonials__grid">
+      <figure class="testimonials__card card card--interactive" data-animate>
+        <span class="testimonials__flag">Exemplo — substituir por avaliação real</span>
+        <span class="testimonials__quote" aria-hidden="true">&ldquo;</span>
+        <blockquote class="testimonials__text">Cole aqui uma avaliação real de cliente (Google, Instagram ou WhatsApp).</blockquote>
+        <figcaption class="testimonials__author">
+          <span class="testimonials__name">Nome do cliente</span>
+        </figcaption>
+      </figure><figure class="testimonials__card card card--interactive" data-animate>
+        <span class="testimonials__flag">Exemplo — substituir por avaliação real</span>
+        <span class="testimonials__quote" aria-hidden="true">&ldquo;</span>
+        <blockquote class="testimonials__text">Cole aqui uma avaliação real de cliente (Google, Instagram ou WhatsApp).</blockquote>
+        <figcaption class="testimonials__author">
+          <span class="testimonials__name">Nome do cliente</span>
+        </figcaption>
+      </figure><figure class="testimonials__card card card--interactive" data-animate>
+        <span class="testimonials__flag">Exemplo — substituir por avaliação real</span>
+        <span class="testimonials__quote" aria-hidden="true">&ldquo;</span>
+        <blockquote class="testimonials__text">Cole aqui uma avaliação real de cliente (Google, Instagram ou WhatsApp).</blockquote>
+        <figcaption class="testimonials__author">
+          <span class="testimonials__name">Nome do cliente</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="faq section bg-muted" id="faq">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid fx-grid--light"></div>
+  </div>
+  <div class="section__inner faq__inner">
+    <div class="faq__intro" data-animate>
+      <span class="eyebrow">Perguntas frequentes</span>
+      <h2 class="section__title">Dúvidas frequentes</h2>
+      <p class="section__description">Não encontrou o que procurava? Fale com a loja mais próxima de você.</p>
+      <a href="#" class="btn btn--dark faq__cta">Falar com a Especell</a>
+    </div>
+    <div class="faq__list" data-accordion>
+      <details class="faq__item" data-animate>
+        <summary class="faq__question"><span>Quais aparelhos vocês consertam?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>Celulares, notebooks, computadores e consoles, além de serviços de informática em geral.</p></div>
+      </details><details class="faq__item" data-animate>
+        <summary class="faq__question"><span>Vocês atendem todas as marcas?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>Sim. Trabalhamos com aparelhos de todos os fabricantes.</p></div>
+      </details><details class="faq__item" data-animate>
+        <summary class="faq__question"><span>Como funciona o atendimento?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>Primeiro fazemos a avaliação do aparelho, depois passamos o orçamento. O conserto só é feito após a sua aprovação.</p></div>
+      </details><details class="faq__item" data-animate>
+        <summary class="faq__question"><span>Onde ficam as lojas?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>Todas as nossas unidades ficam dentro do Jacomar, uma em cada loja: Maestro, Novo Mundo e BR277 em Curitiba, e Guatupê e Costeira na região metropolitana.</p></div>
+      </details><details class="faq__item" data-animate>
+        <summary class="faq__question"><span>A avaliação tem custo?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>Não. A avaliação do aparelho é gratuita. Você só decide se quer seguir depois de receber o orçamento.</p></div>
+      </details><details class="faq__item" data-animate>
+        <summary class="faq__question"><span>Qual o prazo de um conserto?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>A maioria dos consertos fica pronta em menos de 24 horas. Reparos mais complexos, como placa ou aparelho que teve contato com líquido, podem levar mais tempo — o prazo é informado no orçamento.</p></div>
+      </details><details class="faq__item" data-animate>
+        <summary class="faq__question"><span>Os serviços têm garantia?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+        <div class="faq__answer"><p>Sim. Os reparos têm 90 dias de garantia sobre o serviço executado: se o aparelho voltar a apresentar o mesmo problema, a gente resolve. A garantia não cobre danos novos, como queda, impacto ou contato com líquido depois da retirada.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="cta bg-ink">
+  <div class="cta__glow" aria-hidden="true"></div>
+  <div class="cta__inner" data-animate>
+    <span class="eyebrow">Atendimento</span>
+    <h2 class="cta__title">Quebrou? Estragou? Não está carregando?</h2>
+    <p class="cta__description">Fale com a loja Especell mais próxima de você e descubra o que dá para fazer pelo seu aparelho.</p>
+    <div class="cta__actions">
+      <a href="#" class="btn btn--accent" data-magnetic><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg> Falar no WhatsApp</a>
+      <a href="#lojas" class="btn btn--outline">Ver nossas lojas</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer bg-ink">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__name">Especell</p>
+      <p class="site-footer__tagline">Especialistas em consertos de celular, notebook, PC e console. No mercado desde 2010.</p>
+      <div class="site-footer__social">
+        <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="17.2" cy="6.9" r="1.1" fill="currentColor"/>
+</svg></a>
+        <a href="#" aria-label="Telefone"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg></a>
+      </div>
+    </div>
+    <div class="site-footer__column">
+      <p class="site-footer__column-title">Navegação</p>
+      <ul class="site-footer__menu">
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#lojas">Lojas</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__column">
+      <p class="site-footer__column-title">Lojas</p>
+      <div class="site-footer__text">
+        <p>Maestro · Novo Mundo · BR277<br>Curitiba/PR</p>
+        <p>Guatupê · Costeira<br>São José dos Pinhais/PR</p>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <span>&copy; 2026 Especell. Todos os direitos reservados.</span>
+    <span class="site-footer__legal">Atendimento presencial nas lojas físicas.</span>
+  </div>
+</footer>
+
+<div class="floating-actions">
+  <button type="button" class="floating-actions__btn floating-actions__btn--top" data-back-to-top aria-label="Voltar ao topo" hidden><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></button>
+  <a href="#" class="floating-actions__btn floating-actions__btn--wa" aria-label="Falar no WhatsApp">
+    <span class="floating-actions__pulse" aria-hidden="true"></span>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>
+  </a>
+</div>
+
+<div class="mobile-bar">
+  <a href="#" class="mobile-bar__btn mobile-bar__btn--accent"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C11.4 9 11 8 10.8 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20.5 3.5A10.5 10.5 0 0 0 3.9 16.4L3 21l4.7-.9A10.5 10.5 0 1 0 20.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg><span>WhatsApp</span></a>
+  <a href="#" class="mobile-bar__btn"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.3 3.5h3l1.5 3.8-2 1.4a11.5 11.5 0 0 0 5.5 5.5l1.4-2 3.8 1.5v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 4.5 5.5a1.8 1.8 0 0 1 1.8-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+</svg><span>Ligar</span></a>
+</div>
+
+<script>
+/**
+ * Especell theme interactions.
+ *
+ * Two rules this file follows:
+ *
+ * 1. Motion is an enhancement, never a requirement. The `.js` class added in
+ *    the <head> is what enables the hidden-then-reveal styles, so if this
+ *    script never runs the content is simply visible.
+ *
+ * 2. The theme editor swaps section markup at runtime and fires
+ *    `shopify:section:load`. Anything that binds to elements has to be
+ *    re-applied to the new markup, or freshly rendered sections stay
+ *    invisible while the merchant is editing them.
+ */
+(function () {
+  'use strict';
+
+  var reduceMotion =
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var supportsObserver = 'IntersectionObserver' in window;
+  var finePointer =
+    window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* Marks elements we've already wired so re-init never double-binds. */
+  var BOUND = 'data-bound';
+
+  function unbound(root, selector) {
+    return Array.prototype.filter.call(root.querySelectorAll(selector), function (el) {
+      if (el.hasAttribute(BOUND)) return false;
+      el.setAttribute(BOUND, '');
+      return true;
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Reveal on scroll, with stagger for grouped children
+   * ---------------------------------------------------------------- */
+  var revealObserver = null;
+
+  function initReveal(root) {
+    var targets = unbound(root, '[data-animate]');
+    if (!targets.length) return;
+
+    if (reduceMotion || !supportsObserver) {
+      targets.forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+    }
+
+    // Stagger siblings that share a parent so grids cascade in.
+    var seen = new Map();
+    targets.forEach(function (el) {
+      var parent = el.parentElement;
+      var index = seen.get(parent) || 0;
+      seen.set(parent, index + 1);
+      if (index > 0 && index < 8) {
+        el.style.setProperty('--reveal-delay', index * 80 + 'ms');
+      }
+      revealObserver.observe(el);
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Safety net for the reveal.
+   *
+   * IntersectionObserver is the primary mechanism, but if it ever fails to
+   * fire — a browser quirk, a background/throttled tab, an embedded webview —
+   * the page would be left blank, since the content starts at opacity 0.
+   * This sweep reveals anything already on screen using plain geometry, so a
+   * broken observer costs an animation, never the content.
+   * ---------------------------------------------------------------- */
+  var sweepBound = false;
+  var sweepTicking = false;
+
+  function sweepReveal() {
+    var pending = document.querySelectorAll('[data-animate]:not(.is-visible)');
+    sweepTicking = false;
+
+    if (!pending.length) return;
+
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    Array.prototype.forEach.call(pending, function (el) {
+      var rect = el.getBoundingClientRect();
+      var onScreen = rect.top < vh && rect.bottom > 0;
+      if (onScreen) el.classList.add('is-visible');
+    });
+  }
+
+  function bindSweep() {
+    if (sweepBound) return;
+    sweepBound = true;
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (sweepTicking) return;
+        window.requestAnimationFrame(sweepReveal);
+        sweepTicking = true;
+      },
+      { passive: true }
+    );
+
+    // Give the observer a fair chance first, then backstop it.
+    window.setTimeout(sweepReveal, 1200);
+  }
+
+  /* ------------------------------------------------------------------
+   * Count-up numbers when they scroll into view
+   * ---------------------------------------------------------------- */
+  var counterObserver = null;
+
+  function initCounters(root) {
+    var counters = unbound(root, '[data-counter]');
+    if (!counters.length) return;
+
+    function paint(el, value) {
+      el.textContent = String(value);
+    }
+
+    if (reduceMotion || !supportsObserver) {
+      counters.forEach(function (el) {
+        paint(el, parseInt(el.dataset.counter, 10) || 0);
+      });
+      return;
+    }
+
+    function run(el) {
+      var target = parseInt(el.dataset.counter, 10);
+      if (isNaN(target)) return;
+
+      var duration = 1400;
+      var start = null;
+
+      function step(timestamp) {
+        if (start === null) start = timestamp;
+        var progress = Math.min((timestamp - start) / duration, 1);
+        // easeOutExpo keeps the last digits from crawling
+        var eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        paint(el, Math.round(eased * target));
+        if (progress < 1) window.requestAnimationFrame(step);
+      }
+
+      window.requestAnimationFrame(step);
+    }
+
+    if (!counterObserver) {
+      counterObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            run(entry.target);
+            counterObserver.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.5 }
+      );
+    }
+
+    counters.forEach(function (el) {
+      paint(el, 0);
+      counterObserver.observe(el);
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Parallax layers — one shared scroll listener, refreshable list
+   * ---------------------------------------------------------------- */
+  var parallaxLayers = [];
+  var parallaxBound = false;
+  var parallaxTicking = false;
+
+  function updateParallax() {
+    parallaxLayers.forEach(function (el) {
+      if (!el.isConnected) return;
+      var rect = el.getBoundingClientRect();
+      // Skip work for anything comfortably off-screen
+      if (rect.bottom < -200 || rect.top > window.innerHeight + 200) return;
+      var speed = parseFloat(el.dataset.parallaxSpeed || '0.12');
+      var scale = el.dataset.parallaxScale || '1.08';
+      el.style.transform =
+        'translate3d(0,' + rect.top * speed + 'px, 0) scale(' + scale + ')';
+    });
+    parallaxTicking = false;
+  }
+
+  function initParallax() {
+    if (reduceMotion) return;
+
+    parallaxLayers = Array.prototype.slice.call(
+      document.querySelectorAll('[data-parallax]')
+    );
+    if (!parallaxLayers.length) return;
+
+    if (!parallaxBound) {
+      window.addEventListener(
+        'scroll',
+        function () {
+          if (parallaxTicking) return;
+          window.requestAnimationFrame(updateParallax);
+          parallaxTicking = true;
+        },
+        { passive: true }
+      );
+      parallaxBound = true;
+    }
+
+    updateParallax();
+  }
+
+  /* ------------------------------------------------------------------
+   * Subtle 3D tilt following the pointer
+   * ---------------------------------------------------------------- */
+  function initTilt(root) {
+    if (reduceMotion || !finePointer) return;
+
+    var MAX = 5; // degrees
+
+    unbound(root, '[data-tilt]').forEach(function (card) {
+      var frame = null;
+
+      card.addEventListener('pointermove', function (event) {
+        if (frame) return;
+        frame = window.requestAnimationFrame(function () {
+          var rect = card.getBoundingClientRect();
+          var px = (event.clientX - rect.left) / rect.width - 0.5;
+          var py = (event.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform =
+            'perspective(900px) rotateX(' +
+            (-py * MAX).toFixed(2) +
+            'deg) rotateY(' +
+            (px * MAX).toFixed(2) +
+            'deg) translateY(-6px)';
+          frame = null;
+        });
+      });
+
+      card.addEventListener('pointerleave', function () {
+        if (frame) {
+          window.cancelAnimationFrame(frame);
+          frame = null;
+        }
+        card.style.transform = '';
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Magnetic buttons — they lean toward the cursor
+   * ---------------------------------------------------------------- */
+  function initMagnetic(root) {
+    if (reduceMotion || !finePointer) return;
+
+    var STRENGTH = 0.22;
+
+    unbound(root, '[data-magnetic]').forEach(function (el) {
+      var frame = null;
+
+      el.addEventListener('pointermove', function (event) {
+        if (frame) return;
+        frame = window.requestAnimationFrame(function () {
+          var rect = el.getBoundingClientRect();
+          var dx = (event.clientX - (rect.left + rect.width / 2)) * STRENGTH;
+          var dy = (event.clientY - (rect.top + rect.height / 2)) * STRENGTH;
+          el.style.setProperty('--magnet-x', dx.toFixed(1) + 'px');
+          el.style.setProperty('--magnet-y', dy.toFixed(1) + 'px');
+          frame = null;
+        });
+      });
+
+      el.addEventListener('pointerleave', function () {
+        if (frame) {
+          window.cancelAnimationFrame(frame);
+          frame = null;
+        }
+        el.style.setProperty('--magnet-x', '0px');
+        el.style.setProperty('--magnet-y', '0px');
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * FAQ: keep only one answer open at a time
+   * ---------------------------------------------------------------- */
+  function initAccordion(root) {
+    unbound(root, '[data-accordion]').forEach(function (group) {
+      var items = group.querySelectorAll('details');
+      items.forEach(function (item) {
+        item.addEventListener('toggle', function () {
+          if (!item.open) return;
+          items.forEach(function (other) {
+            if (other !== item) other.open = false;
+          });
+        });
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Mobile navigation
+   * ---------------------------------------------------------------- */
+  function initMenu(root) {
+    var toggle = root.querySelector('[data-menu-toggle]');
+    var menu = root.querySelector('[data-mobile-menu]');
+    if (!toggle || !menu || toggle.hasAttribute(BOUND)) return;
+    toggle.setAttribute(BOUND, '');
+
+    toggle.addEventListener('click', function () {
+      var isOpen = menu.hasAttribute('data-open');
+      if (isOpen) {
+        menu.removeAttribute('data-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      } else {
+        menu.setAttribute('data-open', '');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Close the menu after tapping a link.
+    menu.addEventListener('click', function (event) {
+      if (event.target.closest('a')) {
+        menu.removeAttribute('data-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Header shadow once the page scrolls
+   * ---------------------------------------------------------------- */
+  function initHeaderState(root) {
+    var header = root.querySelector('[data-site-header]');
+    if (!header || header.hasAttribute(BOUND)) return;
+    header.setAttribute(BOUND, '');
+
+    var ticking = false;
+
+    function update() {
+      header.classList.toggle('is-scrolled', window.scrollY > 12);
+      ticking = false;
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        window.requestAnimationFrame(update);
+        ticking = true;
+      },
+      { passive: true }
+    );
+
+    update();
+  }
+
+  /* ------------------------------------------------------------------
+   * Reading progress bar
+   * ---------------------------------------------------------------- */
+  function initReadingProgress() {
+    var bar = document.querySelector('[data-reading-progress]');
+    if (!bar || bar.hasAttribute(BOUND)) return;
+    bar.setAttribute(BOUND, '');
+
+    var ticking = false;
+
+    function update() {
+      var doc = document.documentElement;
+      var scrollable = doc.scrollHeight - window.innerHeight;
+      var progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+      // Clamp: elastic/overscroll can push this outside 0–1 on touch devices
+      progress = Math.max(0, Math.min(progress, 1));
+      bar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+      ticking = false;
+    }
+
+    function request() {
+      if (ticking) return;
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request, { passive: true });
+    update();
+  }
+
+  /* ------------------------------------------------------------------
+   * Back-to-top: only appears once there is something to go back to
+   * ---------------------------------------------------------------- */
+  function initBackToTop() {
+    var btn = document.querySelector('[data-back-to-top]');
+    if (!btn || btn.hasAttribute(BOUND)) return;
+    btn.setAttribute(BOUND, '');
+
+    var ticking = false;
+
+    function update() {
+      if (window.scrollY > window.innerHeight * 0.8) {
+        btn.removeAttribute('hidden');
+      } else {
+        btn.setAttribute('hidden', '');
+      }
+      ticking = false;
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        window.requestAnimationFrame(update);
+        ticking = true;
+      },
+      { passive: true }
+    );
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+
+    update();
+  }
+
+  /** Everything that must be (re)applied to a chunk of markup. */
+  function initScope(root) {
+    initReveal(root);
+    initCounters(root);
+    initTilt(root);
+    initMagnetic(root);
+    initAccordion(root);
+    initMenu(root);
+    initHeaderState(root);
+    initParallax();
+    bindSweep();
+    // A section re-rendered by the editor is usually the one being looked at,
+    // so reveal what is already on screen without waiting for the observer.
+    window.requestAnimationFrame(sweepReveal);
+  }
+
+  function init() {
+    initScope(document);
+    initBackToTop();
+    initReadingProgress();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  /* The theme editor re-renders a section after every settings change. */
+  document.addEventListener('shopify:section:load', function (event) {
+    initScope(event.target);
+  });
+})();
+
+</script>
+</body>
+</html>

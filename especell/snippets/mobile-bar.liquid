@@ -1,0 +1,75 @@
+{% comment %}
+  Fixed call-to-action bar shown only on small screens, where most paid-traffic
+  visitors land. Hidden entirely if the merchant turns it off in theme settings.
+{% endcomment %}
+{% if settings.show_mobile_bar and settings.whatsapp_url != blank or settings.show_mobile_bar and settings.phone_number != blank %}
+  <div class="mobile-bar">
+    {% if settings.whatsapp_url != blank %}
+      <a
+        href="{% render 'whatsapp-link' %}"
+        class="mobile-bar__btn mobile-bar__btn--accent"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ 'icon-whatsapp.svg' | inline_asset_content }}
+        <span>WhatsApp</span>
+      </a>
+    {% endif %}
+
+    {% if settings.phone_number != blank %}
+      <a
+        href="tel:{{ settings.phone_number | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.' }}"
+        class="mobile-bar__btn"
+      >
+        {{ 'icon-phone.svg' | inline_asset_content }}
+        <span>Ligar</span>
+      </a>
+    {% endif %}
+  </div>
+
+  <style>
+    .mobile-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      display: none;
+      border-top: 1px solid color-mix(in srgb, #fff 12%, transparent);
+      background-color: var(--color-ink);
+    }
+    .mobile-bar__btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.95rem 0.5rem;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-heading--family);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .mobile-bar__btn svg {
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+    .mobile-bar__btn--accent {
+      background-color: var(--color-accent);
+      color: var(--color-ink);
+    }
+
+    @media (max-width: 47.99rem) {
+      .mobile-bar {
+        display: flex;
+      }
+      /* Keep the footer clear of the fixed bar */
+      body {
+        padding-bottom: 3.5rem;
+      }
+    }
+  </style>
+{% endif %}

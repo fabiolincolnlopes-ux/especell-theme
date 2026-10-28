@@ -1,0 +1,283 @@
+<section class="how bg-ink section full-width" id="{{ section.settings.anchor_id | default: 'como-funciona' }}">
+  <div class="fx-bg" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="fx-glow fx-glow--left"></div>
+  </div>
+
+  <div class="section__inner">
+    <div class="section__intro" data-animate>
+      {% if section.settings.eyebrow != blank %}
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      <h2 class="section__title">{{ section.settings.heading | default: 'Como funciona' }}</h2>
+      {% if section.settings.description != blank %}
+        <p class="section__description">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+
+    <div class="how__wrap">
+      {% comment %}
+        Track that runs behind the steps and draws itself in once the list is
+        on screen, reading as one continuous process instead of three blocks.
+      {% endcomment %}
+      <div class="how__track" aria-hidden="true" data-animate>
+        <span class="how__track-fill"></span>
+      </div>
+
+      <ol class="how__steps">
+        {% for block in section.blocks %}
+          <li class="how__step" data-animate {{ block.shopify_attributes }}>
+            <span class="how__ghost" aria-hidden="true">
+              {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+            </span>
+
+            <span class="how__dot" aria-hidden="true"></span>
+
+            <span class="how__icon">
+              {% case block.settings.icon %}
+                {% when 'search' %}
+                  {{ 'icon-search.svg' | inline_asset_content }}
+                {% when 'document' %}
+                  {{ 'icon-document.svg' | inline_asset_content }}
+                {% when 'wrench' %}
+                  {{ 'icon-wrench.svg' | inline_asset_content }}
+                {% when 'shield' %}
+                  {{ 'icon-shield.svg' | inline_asset_content }}
+                {% when 'clock' %}
+                  {{ 'icon-clock.svg' | inline_asset_content }}
+                {% else %}
+                  {{ 'icon-wrench.svg' | inline_asset_content }}
+              {% endcase %}
+            </span>
+
+            <span class="how__step-number">
+              {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+            </span>
+            <h3 class="how__step-title">{{ block.settings.title | default: 'Etapa' }}</h3>
+            {% if block.settings.description != blank %}
+              <p class="how__step-text">{{ block.settings.description }}</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .how {
+    position: relative;
+    overflow: hidden;
+  }
+  .how .section__inner {
+    position: relative;
+  }
+
+  .how__wrap {
+    position: relative;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  /* The connecting track sits on the same line as the step dots */
+  .how__track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: color-mix(in srgb, #fff 12%, transparent);
+    overflow: hidden;
+    display: none;
+  }
+  .how__track-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      color-mix(in srgb, var(--color-accent) 40%, transparent)
+    );
+    transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+  }
+  .how__track.is-visible .how__track-fill {
+    width: 100%;
+  }
+
+  .how__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    counter-reset: step;
+  }
+
+  .how__step {
+    position: relative;
+    padding-top: 1.9rem;
+    border-top: 2px solid color-mix(in srgb, #fff 14%, transparent);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__step::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+    transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__step.is-visible::before {
+    width: 100%;
+  }
+  .how__step:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Oversized translucent numeral behind the content */
+  .how__ghost {
+    position: absolute;
+    top: 0.6rem;
+    right: 0;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 7rem;
+    line-height: 1;
+    color: color-mix(in srgb, #fff 5%, transparent);
+    pointer-events: none;
+    user-select: none;
+    transition: color 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__step:hover .how__ghost {
+    color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    transform: translateY(-4px);
+  }
+
+  /* Marker that sits on the track */
+  .how__dot {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-ink);
+    border: 2px solid color-mix(in srgb, #fff 25%, transparent);
+    border-radius: 50%;
+    transition: border-color 0.4s ease, background-color 0.4s ease, transform 0.4s ease;
+    display: none;
+  }
+  .how__step.is-visible .how__dot {
+    border-color: var(--color-accent);
+  }
+  .how__step:hover .how__dot {
+    background-color: var(--color-accent);
+    transform: scale(1.25);
+  }
+
+  .how__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    background-color: color-mix(in srgb, #fff 8%, transparent);
+    color: var(--color-accent);
+    transition: background-color 0.35s ease, color 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .how__icon svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+  .how__step:hover .how__icon {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  .how__step-number {
+    display: block;
+    margin-top: 1.1rem;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .how__step-title {
+    margin-top: 0.4rem;
+    font-size: 1.2rem;
+  }
+  .how__step-text {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, #fff 66%, transparent);
+    max-width: 34ch;
+  }
+
+  @media (min-width: 48rem) {
+    .how__wrap {
+      padding-top: 2.5rem;
+    }
+    .how__track,
+    .how__dot {
+      display: block;
+    }
+    .how__steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .how__step {
+      border-top: none;
+      padding-top: 2.25rem;
+    }
+    .how__step::before {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Como funciona",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "ID da âncora", "default": "como-funciona" },
+    { "type": "text", "id": "eyebrow", "label": "Texto de destaque", "default": "Passo a passo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Como funciona" },
+    { "type": "textarea", "id": "description", "label": "Descrição" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Etapa",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone",
+          "options": [
+            { "value": "search", "label": "Lupa (avaliação)" },
+            { "value": "document", "label": "Documento (orçamento)" },
+            { "value": "wrench", "label": "Chave (conserto)" },
+            { "value": "shield", "label": "Escudo (garantia)" },
+            { "value": "clock", "label": "Relógio (prazo)" }
+          ],
+          "default": "search"
+        },
+        { "type": "text", "id": "title", "label": "Título da etapa", "default": "Etapa" },
+        { "type": "textarea", "id": "description", "label": "Descrição" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Como funciona",
+      "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }]
+    }
+  ]
+}
+{% endschema %}

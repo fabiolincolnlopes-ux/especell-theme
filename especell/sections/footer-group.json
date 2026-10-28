@@ -1,0 +1,49 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Rodapé",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "col-1": {
+          "type": "column",
+          "settings": {
+            "title": "Navegação",
+            "menu": "footer",
+            "text": ""
+          }
+        },
+        "col-2": {
+          "type": "column",
+          "settings": {
+            "title": "Lojas",
+            "menu": "",
+            "text": "<p><strong>Curitiba/PR</strong><br>Boqueirão · Novo Mundo · Uberaba</p><p><strong>São José dos Pinhais/PR</strong><br>Guatupê · Costeira</p>"
+          }
+        }
+      },
+      "block_order": [
+        "col-1",
+        "col-2"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/especell-horizontal-cropped.png",
+        "tagline": "Especialistas em consertos de celular, notebook, PC e console. No mercado desde 2010.",
+        "instagram_url": "https://instagram.com/especell_",
+        "legal_note": "Atendimento presencial nas lojas físicas."
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

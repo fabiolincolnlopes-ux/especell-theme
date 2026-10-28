@@ -1,0 +1,168 @@
+<section class="brands full-width">
+  <div class="brands__inner">
+    {% if section.settings.heading != blank %}
+      <p class="brands__heading" data-animate>{{ section.settings.heading }}</p>
+    {% endif %}
+
+    {% comment %}
+      The track is rendered twice so the loop is seamless: when the first copy
+      has scrolled fully out of view the animation restarts at an identical
+      frame. aria-hidden on the clone keeps it out of the accessibility tree.
+    {% endcomment %}
+    <div class="brands__viewport">
+      <div class="brands__track" style="--marquee-duration: {{ section.settings.speed }}s">
+        {% for i in (1..2) %}
+          <ul class="brands__list" {% if forloop.last %}aria-hidden="true"{% endif %}>
+            {% for block in section.blocks %}
+              <li class="brands__item" {{ block.shopify_attributes }}>
+                {% if block.settings.logo %}
+                  {{ block.settings.logo | image_url: width: 240 | image_tag: alt: block.settings.name, loading: 'lazy', class: 'brands__logo' }}
+                {% else %}
+                  <span class="brands__name">{{ block.settings.name | default: 'Marca' }}</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .brands {
+    background-color: var(--color-ink);
+    color: #fff;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    overflow: hidden;
+  }
+  .brands__inner {
+    max-width: var(--page-width);
+    margin-inline: auto;
+  }
+  .brands__heading {
+    padding-inline: var(--page-margin);
+    text-align: center;
+    font-family: var(--font-heading--family);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: color-mix(in srgb, #fff 55%, transparent);
+  }
+  .brands__viewport {
+    margin-top: 1.5rem;
+    position: relative;
+    /* Fade the edges so brands drift in and out instead of popping */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .brands__track {
+    display: flex;
+    width: max-content;
+    animation: brands-scroll var(--marquee-duration, 32s) linear infinite;
+  }
+  .brands__viewport:hover .brands__track {
+    animation-play-state: paused;
+  }
+  .brands__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    list-style: none;
+    margin: 0;
+    padding: 0 clamp(1.25rem, 2.5vw, 2.25rem);
+  }
+  .brands__item {
+    flex-shrink: 0;
+  }
+  .brands__name {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, #fff 45%, transparent);
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+  .brands__item:hover .brands__name {
+    color: var(--color-accent);
+  }
+  .brands__logo {
+    height: 2rem;
+    width: auto;
+    filter: grayscale(1) brightness(2);
+    opacity: 0.6;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  .brands__item:hover .brands__logo {
+    opacity: 1;
+    filter: none;
+  }
+
+  @keyframes brands-scroll {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      /* Exactly one copy of the list = a seamless restart */
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brands__track {
+      animation: none;
+    }
+    .brands__viewport {
+      overflow-x: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Marcas atendidas",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Consertamos todas as marcas"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Velocidade da esteira",
+      "info": "Quanto maior, mais devagar.",
+      "default": 35
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marca",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nome da marca", "default": "Marca" },
+        { "type": "image_picker", "id": "logo", "label": "Logo (opcional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marcas atendidas",
+      "blocks": [
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" }
+      ]
+    }
+  ]
+}
+{% endschema %}

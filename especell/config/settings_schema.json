@@ -1,0 +1,218 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Especell",
+    "theme_version": "0.1.0",
+    "theme_author": "Especell",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://support.shopify.com/"
+  },
+  {
+    "name": "t:general.typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:general.fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "default": "archivo_narrow_n7",
+        "label": "t:general.primary"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_primary_font",
+        "default": "assistant_n4",
+        "label": "t:general.secondary"
+      }
+    ]
+  },
+  {
+    "name": "Marca",
+    "settings": [
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Nome da marca",
+        "info": "Usado nos títulos das páginas. Ideal é também corrigir em Configurações > Detalhes da loja.",
+        "default": "Especell"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Ícone que aparece na aba do navegador. Quadrado, 96x96 ou maior."
+      }
+    ]
+  },
+  {
+    "name": "Contato",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Usado na barra fixa que aparece no celular e no rodapé."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_url",
+        "label": "Link do WhatsApp principal",
+        "info": "Formato: https://wa.me/55DDDNUMERO (o tipo url da Shopify não aceita valor padrão, por isso este campo é de texto)",
+        "default": "https://wa.me/554199984633"
+      },
+      {
+        "type": "text",
+        "id": "phone_number",
+        "label": "Telefone principal",
+        "info": "Ex.: (41) 9998-4633",
+        "default": "(41) 9998-4633"
+      },
+      {
+        "type": "header",
+        "content": "Mensagem automática do WhatsApp"
+      },
+      {
+        "type": "paragraph",
+        "content": "Texto que já vem escrito quando o cliente clica em um botão de WhatsApp."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_message",
+        "label": "Mensagem dos botões gerais",
+        "default": "Olá! Vim pelo site e gostaria de fazer um orçamento."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_message_store",
+        "label": "Mensagem dos botões de loja",
+        "info": "Use {loja} onde o nome da unidade deve aparecer.",
+        "default": "Olá! Vim pelo site e gostaria de falar com a loja {loja}."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_message_service",
+        "label": "Mensagem das páginas de serviço",
+        "info": "Use {servico} onde o nome do serviço deve aparecer.",
+        "default": "Olá! Vim pelo site e gostaria de saber sobre {servico}."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_mobile_bar",
+        "label": "Mostrar barra fixa no celular",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_floating_whatsapp",
+        "label": "Mostrar botão flutuante de WhatsApp",
+        "info": "Fica no canto da tela. No celular é ocultado, já que a barra fixa cumpre o papel.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_back_to_top",
+        "label": "Mostrar botão de voltar ao topo",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_progress_bar",
+        "label": "Mostrar barra de progresso de leitura",
+        "info": "Linha fina no topo da tela que preenche conforme a pessoa rola a página.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_section_dots",
+        "label": "Mostrar navegação por seções",
+        "info": "Bolinhas na lateral direita indicando em que seção a pessoa está. Clicáveis para pular.",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Rastreamento (Google Ads)",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Mede quantos cliques no WhatsApp e no telefone o anúncio gerou. Sem isso o Google não consegue otimizar a campanha."
+      },
+      {
+        "type": "text",
+        "id": "google_tag_id",
+        "label": "ID da tag do Google",
+        "info": "Ex.: AW-123456789 ou G-ABC123. DEIXE VAZIO se o app Google & YouTube já estiver instalado, senão a conversão conta em dobro."
+      },
+      {
+        "type": "text",
+        "id": "google_ads_conversion_label",
+        "label": "Rótulo da conversão",
+        "info": "Copie do Google Ads em Objetivos > Conversões. Formato: AW-123456789/AbC-D_efGh"
+      }
+    ]
+  },
+  {
+    "name": "t:general.layout",
+    "settings": [
+      {
+        "type": "select",
+        "id": "max_page_width",
+        "label": "t:labels.page_width",
+        "options": [
+          { "value": "90rem", "label": "t:options.page_width.narrow" },
+          { "value": "110rem", "label": "t:options.page_width.wide" }
+        ],
+        "default": "90rem"
+      },
+      {
+        "type": "range",
+        "id": "min_page_margin",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.page_margin",
+        "default": 20
+      }
+    ]
+  },
+  {
+    "name": "t:general.colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#F5F6F8",
+        "label": "t:labels.background"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#14161A",
+        "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "ink_color",
+        "default": "#0A0A0A",
+        "label": "t:labels.ink_color"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#E2FF1A",
+        "label": "t:labels.accent_color"
+      },
+      {
+        "type": "range",
+        "id": "input_corner_radius",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.input_corner_radius",
+        "default": 0
+      }
+    ]
+  }
+]
